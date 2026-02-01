@@ -1,0 +1,26 @@
+# Dependency directories
+node_modules/
+backend/node_modules
+# /bin/
+# /out/
+# /target/
+
+# Environment variables
+# .env
+/backend/config.env
+
+
+# Build output
+/dist/
+/build/
+
+# IDE files
+# .vscode/
+# .idea/
+# *.swp
+# .suo
+# .user
+# .lock
+
+# OS-generated hidden files
+.DS_Store
