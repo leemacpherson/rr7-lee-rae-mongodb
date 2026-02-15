@@ -27,10 +27,22 @@ export default function Navbar() {
               About
             </NavLink>
             <NavLink
+              to="/addItem"
+              className="mr-5 font-medium text-gray-600 hover:text-gray-900"
+            >
+              Add an item
+            </NavLink>
+            <NavLink
               to="/supplies"
               className="mr-5 font-medium text-gray-600 hover:text-gray-900"
             >
               Supplies
+            </NavLink>
+            <NavLink
+              to="/forms"
+              className="mr-5 font-medium text-gray-600 hover:text-gray-900"
+            >
+              Forms
             </NavLink>
             <NavLink
               to="/dashboard"

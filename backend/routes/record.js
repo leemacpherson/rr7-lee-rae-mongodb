@@ -11,9 +11,9 @@ import { ObjectId } from "mongodb";
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const router = express.Router();
 
-// This section will help you get a list of all the records.
-router.get("/", async (req, res) => {
-  let collection = await db.collection("records");
+// This section will help you get a list of all the supplies.
+router.get("/supplies", async (req, res) => {
+  let supplies = await db.collection("supplies");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });

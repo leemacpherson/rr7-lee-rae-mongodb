@@ -15,8 +15,8 @@ try {
   // Send a ping to confirm a successful connection
   await client.db("admin").command({ ping: 1 });
   console.log("Pinged your deployment. You successfully connected to MongoDB!");
-} catch (err) {
-  console.error(err);
+} finally {
+  await client.close(); // any error will be caught up the chain
 }
 
 let db = client.db("rr7-lee-rae-mongodb");
