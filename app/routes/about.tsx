@@ -1,15 +1,15 @@
-import React from "react";
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "About Lee & Rae's" },
-    {
-      name: "find the garden supplies you need quickly",
-      content: "a backgound on what the site is for.",
-    },
-  ];
-}
-
-export default function About() {
-  return <div>About</div>;
+export default function AboutPage() {
+  return (
+    <div className="pl-4 py-8">
+      <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
+      <p className="text-lg text-gray-700 leading-relaxed mb-4">
+        We are passionate about gardening and this page allows us to keep a
+        running inventory of our supplies.
+      </p>
+      <p className="text-lg text-gray-700 leading-relaxed">
+        Our supplies include potting soils, amendments (pumice, etc.) decomposed
+        granite, gravel and bulk topsoil.
+      </p>
+    </div>
+  );
 }

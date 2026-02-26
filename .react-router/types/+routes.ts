@@ -28,7 +28,16 @@ type Pages = {
       "supplyName": string;
     };
   };
+  "/dashboard/DashboardSettings": {
+    params: {};
+  };
+  "/dashboard/DashboardProfile": {
+    params: {};
+  };
   "/forms": {
+    params: {};
+  };
+  "/contact": {
     params: {};
   };
 };
@@ -36,7 +45,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/about" | "/addItem" | "/supplies" | "/supplies/:supplyName" | "/forms";
+    page: "/" | "/about" | "/addItem" | "/supplies" | "/supplies/:supplyName" | "/dashboard/DashboardSettings" | "/dashboard/DashboardProfile" | "/forms" | "/contact";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -58,9 +67,25 @@ type RouteFiles = {
     id: "routes/supply";
     page: "/supplies/:supplyName";
   };
+  "routes/Dashboard/DashboardLayout.jsx": {
+    id: "routes/Dashboard/DashboardLayout";
+    page: ;
+  };
+  "routes/Dashboard/DashboardSettings.jsx": {
+    id: "routes/Dashboard/DashboardSettings";
+    page: "/dashboard/DashboardSettings";
+  };
+  "routes/Dashboard/DashboardProfile.jsx": {
+    id: "routes/Dashboard/DashboardProfile";
+    page: "/dashboard/DashboardProfile";
+  };
   "routes/forms.tsx": {
     id: "routes/forms";
     page: "/forms";
+  };
+  "routes/contact.tsx": {
+    id: "routes/contact";
+    page: "/contact";
   };
 };
 
@@ -71,5 +96,9 @@ type RouteModules = {
   "routes/addItem": typeof import("./app/routes/addItem.tsx");
   "routes/supplies": typeof import("./app/routes/supplies.tsx");
   "routes/supply": typeof import("./app/routes/supply.tsx");
+  "routes/Dashboard/DashboardLayout": typeof import("./app/routes/Dashboard/DashboardLayout.jsx");
+  "routes/Dashboard/DashboardSettings": typeof import("./app/routes/Dashboard/DashboardSettings.jsx");
+  "routes/Dashboard/DashboardProfile": typeof import("./app/routes/Dashboard/DashboardProfile.jsx");
   "routes/forms": typeof import("./app/routes/forms.tsx");
+  "routes/contact": typeof import("./app/routes/contact.tsx");
 };
