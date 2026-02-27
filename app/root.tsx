@@ -37,6 +37,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <footer className="bg-gray-800 text-white p-4 mt-8">
+          <div className="container mx-auto text-center text-sm">
+            &copy; {new Date().getFullYear()} Lee & Rae. All rights reserved.
+          </div>
+        </footer>
       </body>
     </html>
   );

@@ -28,10 +28,13 @@ type Pages = {
       "supplyName": string;
     };
   };
-  "/dashboard/DashboardSettings": {
+  "/dashboard": {
     params: {};
   };
-  "/dashboard/DashboardProfile": {
+  "/dashboard/settings": {
+    params: {};
+  };
+  "/dashboard/profile": {
     params: {};
   };
   "/forms": {
@@ -45,7 +48,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/about" | "/addItem" | "/supplies" | "/supplies/:supplyName" | "/dashboard/DashboardSettings" | "/dashboard/DashboardProfile" | "/forms" | "/contact";
+    page: "/" | "/about" | "/addItem" | "/supplies" | "/supplies/:supplyName" | "/dashboard" | "/dashboard/settings" | "/dashboard/profile" | "/forms" | "/contact";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -67,17 +70,21 @@ type RouteFiles = {
     id: "routes/supply";
     page: "/supplies/:supplyName";
   };
-  "routes/Dashboard/DashboardLayout.jsx": {
-    id: "routes/Dashboard/DashboardLayout";
-    page: ;
+  "routes/dashboard/DashboardLayout.jsx": {
+    id: "routes/dashboard/DashboardLayout";
+    page: "/dashboard" | "/dashboard/settings" | "/dashboard/profile";
   };
-  "routes/Dashboard/DashboardSettings.jsx": {
-    id: "routes/Dashboard/DashboardSettings";
-    page: "/dashboard/DashboardSettings";
+  "routes/dashboard/DashboardHome.jsx": {
+    id: "routes/dashboard/DashboardHome";
+    page: "/dashboard";
   };
-  "routes/Dashboard/DashboardProfile.jsx": {
-    id: "routes/Dashboard/DashboardProfile";
-    page: "/dashboard/DashboardProfile";
+  "routes/dashboard/DashboardSettings.jsx": {
+    id: "routes/dashboard/DashboardSettings";
+    page: "/dashboard/settings";
+  };
+  "routes/dashboard/DashboardProfile.jsx": {
+    id: "routes/dashboard/DashboardProfile";
+    page: "/dashboard/profile";
   };
   "routes/forms.tsx": {
     id: "routes/forms";
@@ -96,9 +103,10 @@ type RouteModules = {
   "routes/addItem": typeof import("./app/routes/addItem.tsx");
   "routes/supplies": typeof import("./app/routes/supplies.tsx");
   "routes/supply": typeof import("./app/routes/supply.tsx");
-  "routes/Dashboard/DashboardLayout": typeof import("./app/routes/Dashboard/DashboardLayout.jsx");
-  "routes/Dashboard/DashboardSettings": typeof import("./app/routes/Dashboard/DashboardSettings.jsx");
-  "routes/Dashboard/DashboardProfile": typeof import("./app/routes/Dashboard/DashboardProfile.jsx");
+  "routes/dashboard/DashboardLayout": typeof import("./app/routes/dashboard/DashboardLayout.jsx");
+  "routes/dashboard/DashboardHome": typeof import("./app/routes/dashboard/DashboardHome.jsx");
+  "routes/dashboard/DashboardSettings": typeof import("./app/routes/dashboard/DashboardSettings.jsx");
+  "routes/dashboard/DashboardProfile": typeof import("./app/routes/dashboard/DashboardProfile.jsx");
   "routes/forms": typeof import("./app/routes/forms.tsx");
   "routes/contact": typeof import("./app/routes/contact.tsx");
 };

@@ -14,10 +14,10 @@ export default [
     index("routes/supplies.tsx"),
     route(":supplyName", "routes/supply.tsx"),
   ]),
-  ...prefix("dashboard", [
-    layout("routes/Dashboard/DashboardLayout.jsx"),
-    route("DashboardSettings", "routes/Dashboard/DashboardSettings.jsx"),
-    route("DashboardProfile", "routes/Dashboard/DashboardProfile.jsx"),
+  route("dashboard", "routes/dashboard/DashboardLayout.jsx", [
+    index("routes/dashboard/DashboardHome.jsx"),
+    route("settings", "routes/dashboard/DashboardSettings.jsx"),
+    route("profile", "routes/dashboard/DashboardProfile.jsx"),
   ]),
   route("forms", "routes/forms.tsx"),
   // route("dashboard", "routes/DashboardHome.tsx"),
