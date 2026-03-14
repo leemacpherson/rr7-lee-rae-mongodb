@@ -1,7 +1,6 @@
 import {
   type RouteConfig,
   index,
-  layout,
   prefix,
   route,
 } from "@react-router/dev/routes";
@@ -9,10 +8,9 @@ import {
 export default [
   index("routes/home.tsx"),
   route("about", "routes/about.tsx"),
-  route("addItem", "routes/addItem.tsx"),
   ...prefix("supplies", [
     index("routes/supplies.tsx"),
-    route(":supplyName", "routes/supply.tsx"),
+    route(":supplyName", "routes/addItem.tsx"),
   ]),
   route("dashboard", "routes/dashboard/DashboardLayout.jsx", [
     index("routes/dashboard/DashboardHome.jsx"),

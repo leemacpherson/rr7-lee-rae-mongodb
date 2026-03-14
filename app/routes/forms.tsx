@@ -1,9 +1,21 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
+import { Form } from "react-router";
+import RadioButtons from "~/components/RadioButtons";
+import RadioButtonsTest from "~/components/RadioButtonsTest";
 
 export default function forms() {
+  const [sqFeetIsChecked, setsqFeetIsChecked] = useState(true);
+  const [sqYardsIsChecked, setsqYardsIsChecked] = useState(false);
+  const handleChangeSqFeet = () => {
+    // Toggle the state when the checkbox is clicked
+    console.log("checked a checkbox -sqFeetIsChecked ", sqFeetIsChecked);
+    setsqFeetIsChecked(!sqFeetIsChecked);
+  };
+
   return (
-    <form className="pl-10">
+    <Form className="pl-10">
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
           <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">
@@ -14,25 +26,101 @@ export default function forms() {
             share.
           </p>
 
+          <div className="flex text-emerald-800">
+            <div className="mr-3 mb-0.5 block min-h-6 ps-6">
+              <input
+                className="relative float-left -ms-6 me-1.5 mt-[0.15rem] h-4.5 w-4.5"
+                type="checkbox"
+                value="square feet"
+                id="squareFeet"
+                name="squareFeet"
+                checked={sqFeetIsChecked}
+                onChange={handleChangeSqFeet}
+              />
+              <label
+                className="inline-block ps-[0.15rem] hover:cursor-pointer"
+                htmlFor="squareFeet"
+              >
+                square feet
+              </label>
+            </div>
+
+            <div className="mb-0.5 block min-h-6 ps-6">
+              <input
+                className="pl-4 relative float-left -ms-6 me-1.5 mt-[0.15rem] h-4.5 w-4.5"
+                type="checkbox"
+                value="square yards"
+                id="squareYards"
+                name="squareYards"
+                checked={sqYardsIsChecked}
+              />
+              <label
+                className="inline-block ps-[0.15rem] hover:cursor-pointer"
+                htmlFor="squareYards"
+              >
+                square yards
+              </label>
+            </div>
+          </div>
+
+          {/* <div className="flex mb-0.5 min-h-6 ps-6">
+            <RadioButtonsTest />
+          </div> */}
+
+          <div className="flex gap-10">
+            <div className="inline-flex items-center">
+              <label
+                className="relative flex items-center cursor-pointer"
+                htmlFor="html"
+              >
+                <input
+                  name="units"
+                  type="radio"
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                  id="squareFeet"
+                />
+                <span className="absolute bg-slate-800 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+              </label>
+              <label
+                className="ml-2 text-slate-600 cursor-pointer text-sm"
+                htmlFor="html"
+              >
+                square feet
+              </label>
+            </div>
+
+            <div className="inline-flex items-center">
+              <label
+                className="relative flex items-center cursor-pointer"
+                htmlFor="squareFeet"
+              >
+                <input
+                  name="units"
+                  type="radio"
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                  id="squareYards"
+                />
+                <span className="absolute bg-slate-800 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+              </label>
+              <label
+                className="ml-2 text-slate-600 cursor-pointer text-sm"
+                htmlFor="squareYards"
+              >
+                square yards
+              </label>
+            </div>
+          </div>
+
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label
-                htmlFor="username"
-                className="block text-sm/6 font-medium text-gray-900 dark:text-white"
-              >
-                Username
-              </label>
               <div className="mt-2">
                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600 dark:bg-white/5 dark:outline-white/10 dark:focus-within:outline-indigo-500">
-                  <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6 dark:text-gray-400">
-                    workcation.com/
-                  </div>
                   <input
                     id="username"
                     name="username"
                     type="text"
                     placeholder="janesmith"
-                    className="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 dark:bg-transparent dark:text-white dark:placeholder:text-gray-500"
+                    className=" w-1  bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 dark:bg-transparent dark:text-white dark:placeholder:text-gray-500"
                   />
                 </div>
               </div>
@@ -510,6 +598,6 @@ export default function forms() {
           Save
         </button>
       </div>
-    </form>
+    </Form>
   );
 }

@@ -1,25 +1,18 @@
 function isValidDescription(value) {
-  console.log("isValidDescription was passed this argument ", value);
-  console.log(
-    "isValidDescription returns",
-    value && value.trim().length > 0 && value.trim().length <= 350,
-  );
-
   return value && value.trim().length > 0 && value.trim().length <= 350;
 }
 
-// function isValidUnits(value) {
-//   return value === "cubic yards" || "cubic feet" || "cu. yd." || "cu. ft.";
-// }
-
 function isValidUnits(value) {
-  return (value === "cubic feet") | (value === "cubic yards");
+  console.log("in isValidUnits(), value has ", value);
+  return value === "squareFeet" || value === "squareYards";
 }
 
-// function isValidAmount(value) {
-//   const amount = parseFloat(value);
-//   return !isNaN(amount) && amount > 0;
-// }
+function isValidAmount(value) {
+  let amountEntered;
+  amountEntered = parseFloat(value);
+  console.log("amount in isValidAmount ", amountEntered);
+  return !isNaN(amountEntered) && amountEntered > 0;
+}
 
 // function isValidDate(value) {
 //   return value && new Date(value).getTime() < new Date().getTime();
@@ -27,23 +20,27 @@ function isValidUnits(value) {
 
 export function validateSupplyInput(input) {
   let validationErrors = {};
-  console.log("validateSupplyInput just started");
 
   if (!isValidDescription(input.description)) {
     validationErrors.description =
       "Invalid expense title. Must be at most 30 characters long.";
   }
 
+  if (!isValidAmount(input.amount)) {
+    validationErrors.amount = "Invalid amount. Must be  > 0";
+  }
+
   if (!isValidUnits(input.units)) {
-    validationErrors.units =
-      "Invalid units. Must be cubic yards, cubic feet, cu. yd, cu. ft..";
+    validationErrors.units = "Invalid units. Must be cubic yards, cubic feet";
   }
 
   // if (!isValidImageLocation(input.imageLocation)) {
   //   validationErrors.imageLocation = "Invalid URL.";
   // }
+  console.log("right before returning to addItem ", validationErrors);
 
   if (Object.keys(validationErrors).length > 0) {
+    console.log("validation error is ", validationErrors);
     throw validationErrors;
   }
 }

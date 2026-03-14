@@ -26,17 +26,6 @@ export async function loader() {
   };
 }
 
-// Server-side action: Handles form submission (Create)
-// export async function action({ request }: ActionFunctionArgs) {
-//   const formData = await request.formData();
-//   const name = formData.get("name");
-
-//   const db = await getDb();
-//   await db.collection("items").insertOne({ name, createdAt: new Date() });
-
-//   return { success: true }
-// }
-
 export default function Supplies({ loaderData }: Route.ComponentProps) {
   const { items } = loaderData;
   console.log(
@@ -77,22 +66,3 @@ export default function Supplies({ loaderData }: Route.ComponentProps) {
     </div>
   );
 }
-
-// export default function Home({ loaderData }: Route.ComponentProps) {
-//   const { items } = loaderData;
-
-//   return (
-//     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-//       <h1>MongoDB Items</h1>
-//       <ul>
-//         {items.map((item: any) => (
-//           <li key={item._id}>{item.name}</li>
-//         ))}
-//       </ul>
-//       <Form method="post">
-//         <input type="text" name="name" required />
-//         <button type="submit">Add Item</button>
-//       </Form>
-//     </div>
-//   );
-// }

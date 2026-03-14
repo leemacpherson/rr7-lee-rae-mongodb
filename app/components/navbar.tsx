@@ -19,16 +19,6 @@ const Navbar = () => {
             Home
           </NavLink>
           <NavLink
-            to={"/about"}
-            className={({ isActive }) =>
-              isActive
-                ? "text-yellow-300 font-bold border-b-2 border-yellow-300 pb-1"
-                : "text-white hover:text-yellow-200 transition duration-300"
-            }
-          >
-            About
-          </NavLink>
-          <NavLink
             to={"/supplies"}
             className={({ isActive }) =>
               isActive
@@ -77,6 +67,17 @@ const Navbar = () => {
             }
           >
             Contact
+          </NavLink>
+
+          <NavLink
+            to={"/about"}
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-300 font-bold border-b-2 border-yellow-300 pb-1"
+                : "text-white hover:text-yellow-200 transition duration-300"
+            }
+          >
+            About
           </NavLink>
         </ul>
       </div>

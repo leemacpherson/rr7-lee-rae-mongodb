@@ -17,9 +17,6 @@ type Pages = {
   "/about": {
     params: {};
   };
-  "/addItem": {
-    params: {};
-  };
   "/supplies": {
     params: {};
   };
@@ -48,7 +45,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/about" | "/addItem" | "/supplies" | "/supplies/:supplyName" | "/dashboard" | "/dashboard/settings" | "/dashboard/profile" | "/forms" | "/contact";
+    page: "/" | "/about" | "/supplies" | "/supplies/:supplyName" | "/dashboard" | "/dashboard/settings" | "/dashboard/profile" | "/forms" | "/contact";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -58,16 +55,12 @@ type RouteFiles = {
     id: "routes/about";
     page: "/about";
   };
-  "routes/addItem.tsx": {
-    id: "routes/addItem";
-    page: "/addItem";
-  };
   "routes/supplies.tsx": {
     id: "routes/supplies";
     page: "/supplies";
   };
-  "routes/supply.tsx": {
-    id: "routes/supply";
+  "routes/addItem.tsx": {
+    id: "routes/addItem";
     page: "/supplies/:supplyName";
   };
   "routes/dashboard/DashboardLayout.jsx": {
@@ -100,9 +93,8 @@ type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "routes/home": typeof import("./app/routes/home.tsx");
   "routes/about": typeof import("./app/routes/about.tsx");
-  "routes/addItem": typeof import("./app/routes/addItem.tsx");
   "routes/supplies": typeof import("./app/routes/supplies.tsx");
-  "routes/supply": typeof import("./app/routes/supply.tsx");
+  "routes/addItem": typeof import("./app/routes/addItem.tsx");
   "routes/dashboard/DashboardLayout": typeof import("./app/routes/dashboard/DashboardLayout.jsx");
   "routes/dashboard/DashboardHome": typeof import("./app/routes/dashboard/DashboardHome.jsx");
   "routes/dashboard/DashboardSettings": typeof import("./app/routes/dashboard/DashboardSettings.jsx");
