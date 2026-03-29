@@ -39,16 +39,6 @@ const Navbar = () => {
             Dashboard
           </NavLink>
           <NavLink
-            to={"/addItem"}
-            className={({ isActive }) =>
-              isActive
-                ? "text-yellow-300 font-bold border-b-2 border-yellow-300 pb-1"
-                : "text-white hover:text-yellow-200 transition duration-300"
-            }
-          >
-            Add Supply
-          </NavLink>
-          <NavLink
             to={"/forms"}
             className={({ isActive }) =>
               isActive

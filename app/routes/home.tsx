@@ -23,7 +23,7 @@ export default function Home() {
                   {" "}
                   Explore our supplies with
                 </span>
-                <span className="block text-indigo-600"> Saved data</span>
+                <span className="block text-indigo-600"> Supply List</span>
               </h1>
 
               <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl">
@@ -32,9 +32,10 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row sm:space-x-4">
                 <Link
                   to="/supplies"
-                  className="flex items-center justify-center px-6 py-3 text-lg text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                  className="flex items-center
+                  justify-center px-6 py-3 text-lg text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                 >
-                  Saved data
+                  Supply List
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-5 h-5 ml-1"

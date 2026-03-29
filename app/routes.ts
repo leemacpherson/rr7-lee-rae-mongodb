@@ -9,8 +9,9 @@ export default [
   index("routes/home.tsx"),
   route("about", "routes/about.tsx"),
   ...prefix("supplies", [
-    index("routes/supplies.tsx"),
-    route(":supplyName", "routes/addItem.tsx"),
+    index("routes/supplies/supplies.tsx"),
+    route(":id", "routes/supplies/$id.jsx"),
+    route("add", "routes/supplies/addItem.tsx"),
   ]),
   route("dashboard", "routes/dashboard/DashboardLayout.jsx", [
     index("routes/dashboard/DashboardHome.jsx"),

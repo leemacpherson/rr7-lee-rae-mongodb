@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { redirect, type ActionFunctionArgs, useActionData } from "react-router";
-import { validateSupplyInput } from "../data/validation.server";
+import { validateSupplyInput } from "../../data/validation.server";
 import { getDb } from "~/data/db.server";
 
-import EditItem from "../components/editItem";
 import ErrorPage from "~/components/ErrorPage";
+import SupplyForm from "~/components/SupplyForm";
 
 interface Supply {
   _id: string;
@@ -21,7 +21,7 @@ export default function addItem() {
     setValue(event.target.value); // Update state on change
   };
   console.log("in addItem, actionData holds ", actionData);
-  return <EditItem />;
+  return <SupplyForm />;
 }
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -12,10 +12,19 @@ const client = new MongoClient(process.env.ATLAS_URI);
 let db: ReturnType<MongoClient["db"]>;
 
 export async function getDb() {
-  console.log("in db.server we just entered getDb() and db has ", db);
+  console.log("in db.server we just entered getDb() ");
   if (db) return db;
   await client.connect();
   db = client.db("lee-rae-mongodb");
   console.log("in the db.server and it just connected to the database");
   return db;
+}
+
+export async function closeDb() {
+  if (client) {
+    await client.close();
+    console.log("in db.server and we just closed the database connection");
+  } else {
+    console.log("in db.server and there was no client to close");
+  }
 }

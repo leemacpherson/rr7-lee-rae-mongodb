@@ -20,10 +20,13 @@ type Pages = {
   "/supplies": {
     params: {};
   };
-  "/supplies/:supplyName": {
+  "/supplies/:id": {
     params: {
-      "supplyName": string;
+      "id": string;
     };
+  };
+  "/supplies/add": {
+    params: {};
   };
   "/dashboard": {
     params: {};
@@ -45,7 +48,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/about" | "/supplies" | "/supplies/:supplyName" | "/dashboard" | "/dashboard/settings" | "/dashboard/profile" | "/forms" | "/contact";
+    page: "/" | "/about" | "/supplies" | "/supplies/:id" | "/supplies/add" | "/dashboard" | "/dashboard/settings" | "/dashboard/profile" | "/forms" | "/contact";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -55,13 +58,17 @@ type RouteFiles = {
     id: "routes/about";
     page: "/about";
   };
-  "routes/supplies.tsx": {
-    id: "routes/supplies";
+  "routes/supplies/supplies.tsx": {
+    id: "routes/supplies/supplies";
     page: "/supplies";
   };
-  "routes/addItem.tsx": {
-    id: "routes/addItem";
-    page: "/supplies/:supplyName";
+  "routes/supplies/$id.jsx": {
+    id: "routes/supplies/$id";
+    page: "/supplies/:id";
+  };
+  "routes/supplies/addItem.tsx": {
+    id: "routes/supplies/addItem";
+    page: "/supplies/add";
   };
   "routes/dashboard/DashboardLayout.jsx": {
     id: "routes/dashboard/DashboardLayout";
@@ -93,8 +100,9 @@ type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "routes/home": typeof import("./app/routes/home.tsx");
   "routes/about": typeof import("./app/routes/about.tsx");
-  "routes/supplies": typeof import("./app/routes/supplies.tsx");
-  "routes/addItem": typeof import("./app/routes/addItem.tsx");
+  "routes/supplies/supplies": typeof import("./app/routes/supplies/supplies.tsx");
+  "routes/supplies/$id": typeof import("./app/routes/supplies/$id.jsx");
+  "routes/supplies/addItem": typeof import("./app/routes/supplies/addItem.tsx");
   "routes/dashboard/DashboardLayout": typeof import("./app/routes/dashboard/DashboardLayout.jsx");
   "routes/dashboard/DashboardHome": typeof import("./app/routes/dashboard/DashboardHome.jsx");
   "routes/dashboard/DashboardSettings": typeof import("./app/routes/dashboard/DashboardSettings.jsx");
