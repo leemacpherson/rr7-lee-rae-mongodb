@@ -12,7 +12,6 @@ const client = new MongoClient(process.env.ATLAS_URI);
 let db: ReturnType<MongoClient["db"]>;
 
 export async function getDb() {
-  console.log("in db.server we just entered getDb() ");
   if (db) return db;
   await client.connect();
   db = client.db("lee-rae-mongodb");

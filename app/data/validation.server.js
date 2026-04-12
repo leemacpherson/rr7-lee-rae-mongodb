@@ -2,6 +2,10 @@ function isValidDescription(value) {
   return value && value.trim().length > 0 && value.trim().length <= 350;
 }
 
+function isValidType(value) {
+  return value && value.trim().length > 0 && value.trim().length <= 30;
+}
+
 function isValidUnits(value) {
   console.log("in isValidUnits(), value has ", value);
   return value === "squareFeet" || value === "squareYards";
@@ -10,15 +14,16 @@ function isValidUnits(value) {
 function isValidAmount(value) {
   let amountEntered;
   amountEntered = parseFloat(value);
-  console.log("amount in isValidAmount ", amountEntered);
+
   return !isNaN(amountEntered) && amountEntered > 0;
 }
 
-// function isValidDate(value) {
-//   return value && new Date(value).getTime() < new Date().getTime();
-// }
+function isValidDate(value) {
+  return value && new Date(value).getTime() < new Date().getTime();
+}
 
 export function validateSupplyInput(input) {
+  console.log("in validateSupplyInput, input is ", input);
   let validationErrors = {};
 
   if (!isValidDescription(input.description)) {
@@ -32,6 +37,10 @@ export function validateSupplyInput(input) {
 
   if (!isValidUnits(input.units)) {
     validationErrors.units = "Invalid units. Must be cubic yards, cubic feet";
+  }
+
+  if (!isValidDate(input.date)) {
+    validationErrors.date = "Invalid date. Must be a valid date.";
   }
 
   // if (!isValidImageLocation(input.imageLocation)) {

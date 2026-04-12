@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { redirect, type ActionFunctionArgs, useActionData } from "react-router";
+import {
+  redirect,
+  type ActionFunctionArgs,
+  useActionData,
+  useNavigate,
+} from "react-router";
 import { validateSupplyInput } from "../../data/validation.server";
 import { getDb } from "~/data/db.server";
 
 import ErrorPage from "~/components/ErrorPage";
+import Modal from "../../components/util/Modal";
 import SupplyForm from "~/components/SupplyForm";
 
 interface Supply {
@@ -15,13 +21,27 @@ interface Supply {
 }
 
 export default function addItem() {
+  const navigate = useNavigate();
   const actionData = useActionData();
   const [value, setValue] = useState("none");
   const handleChange = (event: any) => {
     setValue(event.target.value); // Update state on change
   };
   console.log("in addItem, actionData holds ", actionData);
-  return <SupplyForm />;
+
+  function closeHandler() {
+    // navigate programmatically
+    navigate("..");
+  }
+
+  return (
+    <>
+      <Modal>
+        <SupplyForm className="w-full md:max-w-3xl" />
+      </Modal>
+      <h2>This is addItem after modal</h2>
+    </>
+  );
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -51,6 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
     amount: supplyData.amount,
     type: supplyData.type,
     location: supplyData.location,
+    imageLocation: supplyData.imageLocation,
     description: supplyData.description,
     createdAt: new Date(),
   });

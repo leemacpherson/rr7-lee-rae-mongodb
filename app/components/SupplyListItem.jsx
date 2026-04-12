@@ -6,6 +6,20 @@ function SupplyListItem({ id, description, amount, supplyType, units }) {
   // console.log("in SupplyListItem, the fetcher holds ", fetcher);
   let amountInt = parseInt(amount, 10);
 
+  function editSupplyItemHandler() {
+    console.log("Editing item with id ", id);
+    console.log("the supply list item has fetcher of  ", fetcher);
+    fetcher.submit(null, { method: "patch", action: `${id}` });
+
+    if (fetcher.state !== "idle") {
+      return (
+        <article className="expense-item locked">
+          <p>Deleting...</p>
+        </article>
+      );
+    }
+  }
+
   function deleteSupplyItemHandler() {
     const proceed = confirm("Are you sure? Do you want to delete this item?");
 
@@ -15,14 +29,14 @@ function SupplyListItem({ id, description, amount, supplyType, units }) {
     console.log("Deleting item with id ", id);
     console.log("the supply list item has fetcher of  ", fetcher);
     fetcher.submit(null, { method: "delete", action: `${id}` });
-  }
 
-  if (fetcher.state !== "idle") {
-    return (
-      <article className="expense-item locked">
-        <p>Deleting...</p>
-      </article>
-    );
+    if (fetcher.state !== "idle") {
+      return (
+        <article className="expense-item locked">
+          <p>Deleting...</p>
+        </article>
+      );
+    }
   }
 
   return (

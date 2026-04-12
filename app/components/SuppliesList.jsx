@@ -15,32 +15,18 @@ function SuppliesList({ supplies }) {
               id={supply._id}
               description={supply.description}
               amount={supply.amount}
+              volume={supply.volume}
               location={supply.location}
               supplyType={supply.supplyType}
               units={supply.units}
+              date={supply.date}
+              imageLocation={supply.imageLocation}
             />
           </div>
         ))}
       </div>
     </div>
   );
-
-  // return (
-  //   <ol>
-  //     {supplies.map((supply) => (
-  //       <li key={supply._id}>
-  //         <SupplyListItem
-  //           id={supply._id}
-  //           description={supply.description}
-  //           amount={supply.amount}
-  //           units={supply.units}
-  //           location={supply.location}
-  //           supplyType={supply.supplyType}
-  //         />
-  //       </li>
-  //     ))}
-  //   </ol>
-  // );
 }
 
 export default SuppliesList;
