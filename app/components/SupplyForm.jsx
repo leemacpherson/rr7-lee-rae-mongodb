@@ -1,4 +1,14 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import {
+  Label,
+  Listbox,
+  Transition,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+
 import {
   Form,
   Link,
@@ -6,48 +16,71 @@ import {
   useMatches,
   useParams,
   useNavigation,
+  useLoaderData,
 } from "react-router";
 
-function SupplyForm(supplyData) {
-  const [cuFeetIsChecked, setcuFeetIsChecked] = useState(true);
-  const [cuYardsIsChecked, setcuYardsIsChecked] = useState(false);
-  const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
+const locations = [
+  { id: 1, name: "unspecified location" },
+  { id: 2, name: "big shed in lower yard" },
+  { id: 3, name: "small shed in lower yard" },
+  { id: 4, name: "in basement" },
+  { id: 5, name: "under kitchen under house" },
+  { id: 6, name: "laundry room cabinet right side" },
+  { id: 7, name: "laundry room cabinet left side" },
+];
+
+export default function SupplyForm() {
+  const [selected, setSelected] = useState(locations[3]);
+  const [supplyTypeEntry, setSupplyTypeEntry] = useState("");
+
+  console.log("we just entered SupplyForm");
+
+  // const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
   const params = useParams();
+  const paramsId = String(params.id);
   const matches = useMatches();
-  // const supplies = matches.find((match) => match.id === "routes/supplies");
-  // const supplyData = supplies.find((supply) => supply.id === params.id);
-  const navigation = useNavigation();
+  console.log("1. matches holds ", matches);
+  console.log("2. paramsId holds ", paramsId);
+  console.log("2a. paramsId is type ", typeof paramsId);
 
-  const handleChangeSqFeet = () => {
-    // Toggle the state when the checkbox is clicked
-    console.log("checked a checkbox -cuFeetIsChecked ", cuFeetIsChecked);
-    setcuFeetIsChecked(!cuFeetIsChecked);
-  };
+  const supplies = matches.find((match) => match.id === "routes/supplies").data
+    .items;
+  console.log("3. supplies holds ", supplies);
+
+  const supplyData = supplies.find((supply) => supply._id === paramsId);
+
+  console.log("6. supplyData holds ", supplyData);
+
+  const navigation = useNavigation();
 
   const defaultValues = supplyData
     ? {
         supplyType: supplyData.supplyType,
-        id: supplyData.id,
         amount: supplyData.amount,
         units: supplyData.units,
         description: supplyData.description,
-        date: supplyData.createdAt,
         location: supplyData.location,
         imageLocation: supplyData.imageLocation,
+        date: supplyData.date,
       }
     : {
-        supplyType: "potting soil, for example",
-        id: "",
+        supplyType: "",
         amount: "",
         units: "",
         description: "",
-        date: "",
         location: "",
         imageLocation: "",
       };
 
+  // if (supplyData) {
+  //   setSupplyTypeEntry(supplyData.supplyType);
+  // }
+
   const isSubmitting = navigation.state !== "idle";
+
+  console.log("7. defaultValues holds ", defaultValues);
+  console.log("7a. defaultValues holds ", defaultValues);
 
   return (
     <Form
@@ -61,7 +94,7 @@ function SupplyForm(supplyData) {
             <div className="pl-4 py-8  border-slate-200">
               <p>
                 <label
-                  className="block text-lg/6 font-medium text-gray-900 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                   htmlFor="supplyType"
                 >
                   Supply Type
@@ -70,7 +103,11 @@ function SupplyForm(supplyData) {
                   id="supplyType"
                   name="supplyType"
                   type="text"
-                  autoComplete="given-name"
+                  value={
+                    supplyTypeEntry ? supplyTypeEntry : defaultValues.supplyType
+                  }
+                  onChange={(e) => setSupplyTypeEntry(e.target.value)}
+                  placeholder="enter soil, pots, etc."
                   className="block w-1/2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                 />
               </p>
@@ -78,7 +115,7 @@ function SupplyForm(supplyData) {
               <p>
                 <label
                   htmlFor="amount"
-                  className="block text-lg/6 font-medium text-gray-900 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                 >
                   Amount
                 </label>
@@ -88,7 +125,7 @@ function SupplyForm(supplyData) {
                   id="amount"
                   name="amount"
                   min="0"
-                  step="0.01"
+                  step="1"
                   required
                   defaultValue={defaultValues.amount}
                 />
@@ -101,13 +138,14 @@ function SupplyForm(supplyData) {
                     id="cuYards"
                     name="units"
                     type="radio"
+                    value="cubic yards"
                     className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:before:bg-white/20 forced-colors:appearance-auto forced-colors:before:hidden"
                   />
                   <label
                     htmlFor="cuYards"
                     className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                   >
-                    Cubic Inches
+                    Cubic Yards
                   </label>
                 </div>
                 <div className="flex items-center gap-x-3">
@@ -115,6 +153,7 @@ function SupplyForm(supplyData) {
                     id="cuFeet"
                     name="units"
                     type="radio"
+                    value="cubic feet"
                     className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:before:bg-white/20 forced-colors:appearance-auto forced-colors:before:hidden"
                   />
                   <label
@@ -138,17 +177,77 @@ function SupplyForm(supplyData) {
                   type="date"
                   id="date"
                   name="date"
-                  max={today}
                   required
                   defaultValue={
                     defaultValues.date ? defaultValues.date.slice(0, 10) : ""
                   }
                 />
               </p>
+
+              <div className=" fixed mt-1 mb-1 pt-2 pb-2 w-80 max-w-1/2 left-0. bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+                <Listbox
+                  name="location"
+                  value={selected.name}
+                  defaultValue={defaultValues.location}
+                  onChange={setSelected}
+                >
+                  <Label className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+                    Located in...
+                  </Label>
+                  <div className="relative mt-2">
+                    <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus-visible:outline-indigo-500">
+                      <span className="col-start-1 row-start-1 truncate pr-6">
+                        {selected.name}
+                      </span>
+                      <ChevronUpDownIcon
+                        aria-hidden="true"
+                        className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
+                      />
+                    </ListboxButton>
+
+                    <ListboxOptions
+                      transition
+                      className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline-1 outline-black/5 data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+                    >
+                      {locations.map((person) => (
+                        <ListboxOption
+                          key={person.id}
+                          value={person}
+                          className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden dark:text-white dark:data-focus:bg-indigo-500"
+                        >
+                          <span className="block truncate font-normal group-data-selected:font-semibold">
+                            {person.name}
+                          </span>
+
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white dark:text-indigo-400">
+                            <CheckIcon aria-hidden="true" className="size-5" />
+                          </span>
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </div>
+                </Listbox>
+              </div>
+
+              <p>
+                <label
+                  className="block pt-12 mt-16 text-sm/6 font-medium py-2 text-gray-900 dark:text-white"
+                  htmlFor="description"
+                >
+                  Description and notes about the supply item
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows={3}
+                  className="block w-full rounded-md bg-white px-3 mt-2 mb-2 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
+                  defaultValue={defaultValues.description}
+                />
+              </p>
             </div>
           </div>
 
-          {validationErrors && <p>Validation Errors</p>}
+          {validationErrors && <p>{validationErrors}</p>}
 
           {/* {validationErrors && (
             <ul>
@@ -158,7 +257,7 @@ function SupplyForm(supplyData) {
             </ul>
           )} */}
 
-          <div className="w-full p-2 rounded-md mb-2 flex items-center justify-center">
+          <div className="w-full p-2 pt-6 rounded-md mb-2 flex items-center justify-center">
             <div className="w-md flex items-center justify-between">
               <button
                 className="flex bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 items-center gap-2"
@@ -179,5 +278,3 @@ function SupplyForm(supplyData) {
     </Form>
   );
 }
-
-export default SupplyForm;

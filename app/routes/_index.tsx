@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import type { Route } from "./+types/home";
+// import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -64,7 +64,7 @@ export default function Home() {
           <div className="w-full md:w-1/2">
             <div className="overflow-hidden rounded-md shadow-xl">
               <img
-                src="https://helpwithapi.com/images/rae-tico1.png"
+                src="/images/rae-tico1.png"
                 alt="Explore supplies"
                 className="w-full h-auto"
               />

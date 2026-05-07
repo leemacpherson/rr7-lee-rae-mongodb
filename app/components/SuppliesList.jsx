@@ -1,5 +1,4 @@
 import SupplyListItem from "./SupplyListItem";
-import { NavLink } from "react-router";
 
 function SuppliesList({ supplies }) {
   return (

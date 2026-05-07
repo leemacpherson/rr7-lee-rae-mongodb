@@ -1,6 +1,14 @@
 import { Link, useFetcher } from "react-router";
 
-function SupplyListItem({ id, description, amount, supplyType, units }) {
+function SupplyListItem({
+  id,
+  description,
+  amount,
+  supplyType,
+  location,
+  imageLocation,
+  units,
+}) {
   // const submit = useSubmit();
   const fetcher = useFetcher();
   // console.log("in SupplyListItem, the fetcher holds ", fetcher);
@@ -41,11 +49,23 @@ function SupplyListItem({ id, description, amount, supplyType, units }) {
 
   return (
     <article>
-      <h2 className="text-indigo-700 mb-4">{supplyType}</h2>
-      <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-        {description}
+      <h3 className="text-xl font-semibold text-indigo-700 mb-4">
+        {supplyType}
       </h3>
-      <p className="text-gray-600 mb-4">{units}</p>
+
+      <p className="text-gray-600 mb-4">
+        {amount} {units} in {location}
+      </p>
+      <h2 className=" text-indigo-700 mb-2">{description}</h2>
+      <div className="w-full md:w-1/4">
+        <div className="overflow-hidden rounded-md shadow-xl">
+          <img
+            src={imageLocation}
+            alt="Explore supplies"
+            className="w-full h-auto"
+          />
+        </div>
+      </div>
 
       <menu className="flex gap-2 mt-4">
         <button

@@ -6,10 +6,10 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  index("routes/home.tsx"),
+  index("routes/_index.tsx"),
   route("about", "routes/about.tsx"),
-  ...prefix("supplies", [
-    index("routes/supplies/supplies.tsx"),
+  route("supplies", "routes/supplies.tsx", [
+    // index("routes/supplies.tsx"),
     route(":id", "routes/supplies/$id.jsx"),
     route("add", "routes/supplies/addItem.tsx"),
   ]),
@@ -19,6 +19,5 @@ export default [
     route("profile", "routes/dashboard/DashboardProfile.jsx"),
   ]),
   route("forms", "routes/forms.tsx"),
-  // route("dashboard", "routes/DashboardHome.tsx"),
   route("contact", "routes/contact.tsx"),
 ] satisfies RouteConfig;

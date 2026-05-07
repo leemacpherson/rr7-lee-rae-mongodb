@@ -27,3 +27,11 @@ export async function closeDb() {
     console.log("in db.server and there was no client to close");
   }
 }
+
+// verify the version at runtime within the Node.js application
+// async function run() {
+//   await client.connect();
+//   const info = await client.db().admin().serverInfo();
+//   // This typically provides server info; driver info is often found in client configuration
+//   console.log(client.option; // Check the driver info for version details
+// }

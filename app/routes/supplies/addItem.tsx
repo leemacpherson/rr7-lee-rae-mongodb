@@ -1,15 +1,14 @@
-import { useState } from "react";
 import {
   redirect,
   type ActionFunctionArgs,
   useActionData,
   useNavigate,
 } from "react-router";
-import { validateSupplyInput } from "../../data/validation.server";
+import { validateSupplyInput } from "~/data/validation.server";
 import { getDb } from "~/data/db.server";
 
 import ErrorPage from "~/components/ErrorPage";
-import Modal from "../../components/util/Modal";
+import Modal from "~/components/util/Modal";
 import SupplyForm from "~/components/SupplyForm";
 
 interface Supply {
@@ -18,15 +17,15 @@ interface Supply {
   units: string;
   type: string;
   imageLocation: string;
+  location: string;
+  amount: number;
+  date: string;
 }
 
 export default function addItem() {
   const navigate = useNavigate();
   const actionData = useActionData();
-  const [value, setValue] = useState("none");
-  const handleChange = (event: any) => {
-    setValue(event.target.value); // Update state on change
-  };
+
   console.log("in addItem, actionData holds ", actionData);
 
   function closeHandler() {
@@ -37,7 +36,7 @@ export default function addItem() {
   return (
     <>
       <Modal>
-        <SupplyForm className="w-full md:max-w-3xl" />
+        <SupplyForm />
       </Modal>
       <h2>This is addItem after modal</h2>
     </>
@@ -47,8 +46,9 @@ export default function addItem() {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const supplyData = Object.fromEntries(formData);
+
   console.log(
-    "we are in the action() in addItem and supplyData has ",
+    "-----we are in the action() in addItem and supplyData has ",
     supplyData,
   );
 
@@ -66,15 +66,23 @@ export async function action({ request }: ActionFunctionArgs) {
     return <ErrorPage />;
   }
   const db = await getDb();
-  await db.collection("rr7-supplies").insertOne({
+  console.log(
+    "in addItem action, just got db connection, now about to insertOne with supplyData: ",
+    supplyData,
+  );
+  let insertResults;
+  insertResults = await db.collection("rr7-supplies").insertOne({
     units: supplyData.units,
     amount: supplyData.amount,
-    type: supplyData.type,
+    supplyType: supplyData.supplyType,
     location: supplyData.location,
-    imageLocation: supplyData.imageLocation,
+    imageLocation:
+      "https://helpwithapi.com/supplies/blue-pot-12h-8w-small.jpeg",
     description: supplyData.description,
     createdAt: new Date(),
+    date: supplyData.date,
   });
+  console.log("in addItem action, insertOne results is ", insertResults);
 
   return redirect("/supplies");
 }

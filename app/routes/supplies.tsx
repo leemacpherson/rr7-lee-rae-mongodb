@@ -1,6 +1,6 @@
-import { Form, NavLink } from "react-router";
-import { getSupplies } from "../../data/supplies.server";
-import type { Route } from "./+types/supplies";
+import { Form, NavLink, useLoaderData } from "react-router";
+import { getSupplies } from "~/data/supplies.server";
+// import type { Route } from "./+types/supplies";
 import { Outlet, Link } from "react-router";
 import { FaPlus, FaDownload } from "react-icons/fa";
 import SuppliesList from "~/components/SuppliesList";
@@ -22,8 +22,12 @@ export async function loader(): Promise<{ items: Supply[] }> {
   return getSupplies() as unknown as { items: Supply[] };
 }
 
-export default function Supplies({ loaderData }: Route.ComponentProps) {
-  const { items } = loaderData;
+export function HydrateFallback() {
+  return <p>Loading Game...</p>;
+}
+
+export default function Supplies() {
+  const { items } = useLoaderData() as { items: Supply[] };
 
   return (
     <>

@@ -7,8 +7,7 @@ function isValidType(value) {
 }
 
 function isValidUnits(value) {
-  console.log("in isValidUnits(), value has ", value);
-  return value === "squareFeet" || value === "squareYards";
+  return value === "cubic yards" || value === "cubic feet";
 }
 
 function isValidAmount(value) {
@@ -24,32 +23,44 @@ function isValidDate(value) {
 
 export function validateSupplyInput(input) {
   console.log("in validateSupplyInput, input is ", input);
-  let validationErrors = {};
+  let validationErrors = [];
 
+  if (!isValidType(input.supplyType)) {
+    validationErrors.push(
+      "Invalid supply type. Must enter a short description .",
+    );
+  }
   if (!isValidDescription(input.description)) {
-    validationErrors.description =
-      "Invalid expense title. Must be at most 30 characters long.";
+    validationErrors.push(
+      "Invalid expense title. Must be at most 350 characters long.",
+    );
   }
 
   if (!isValidAmount(input.amount)) {
-    validationErrors.amount = "Invalid amount. Must be  > 0";
+    validationErrors.push("Invalid amount. Must be  > 0");
   }
 
   if (!isValidUnits(input.units)) {
-    validationErrors.units = "Invalid units. Must be cubic yards, cubic feet";
+    validationErrors.push("Invalid units. Must be cubic yards, cubic feet");
   }
 
   if (!isValidDate(input.date)) {
-    validationErrors.date = "Invalid date. Must be a valid date.";
+    validationErrors.push("Invalid date. Must be a date no later than today.");
   }
 
   // if (!isValidImageLocation(input.imageLocation)) {
   //   validationErrors.imageLocation = "Invalid URL.";
   // }
-  console.log("right before returning to addItem ", validationErrors);
+
+  console.log(
+    "9. in validateSupplyInput, right before returning to addItem the errors are",
+    validationErrors,
+  );
 
   if (Object.keys(validationErrors).length > 0) {
     console.log("validation error is ", validationErrors);
     throw validationErrors;
+  } else {
+    return null;
   }
 }
