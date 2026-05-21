@@ -86,7 +86,7 @@ export async function updateSupply(id, supplyData) {
           units: supplyData.units,
           location: supplyData.location,
           amount: supplyData.amount,
-          supplyType: supplyData.supplyTypeype,
+          supplyType: supplyData.supplyType,
           description: supplyData.description,
           date: supplyData.date,
         },

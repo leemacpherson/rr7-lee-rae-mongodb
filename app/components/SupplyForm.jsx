@@ -8,6 +8,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 
 import {
   Form,
@@ -16,7 +17,6 @@ import {
   useMatches,
   useParams,
   useNavigation,
-  useLoaderData,
 } from "react-router";
 
 const locations = [
@@ -62,6 +62,7 @@ export default function SupplyForm() {
         description: supplyData.description,
         location: supplyData.location,
         imageLocation: supplyData.imageLocation,
+        fileUpload: supplyData.fileUpload,
         date: supplyData.date,
       }
     : {
@@ -71,6 +72,8 @@ export default function SupplyForm() {
         description: "",
         location: "",
         imageLocation: "",
+        fileUpload: "placeholder.jpg",
+        date: "",
       };
 
   // if (supplyData) {
@@ -85,6 +88,7 @@ export default function SupplyForm() {
   return (
     <Form
       method={supplyData ? "patch" : "post"}
+      encType="multipart/form-data"
       id="expense-form"
       className="pl-10"
     >
@@ -131,7 +135,7 @@ export default function SupplyForm() {
                 />
               </p>
 
-              <div className="mt-6 space-y-6">
+              <div className="flex items-center gap-x-6 mt-4">
                 <div className="flex items-center gap-x-3">
                   <input
                     defaultChecked
@@ -244,10 +248,67 @@ export default function SupplyForm() {
                   defaultValue={defaultValues.description}
                 />
               </p>
+
+              <div className="col-span-full">
+                <label
+                  htmlFor="photo"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                >
+                  Photo
+                </label>
+                <div className="mt-2 flex items-center gap-x-3">
+                  <UserCircleIcon
+                    aria-hidden="true"
+                    className="size-12 text-gray-300 dark:text-gray-500"
+                  />
+                  <button
+                    type="button"
+                    className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
+                  >
+                    Change
+                  </button>
+                </div>
+              </div>
+
+              <div className="col-span-full">
+                <label
+                  htmlFor="cover-photo"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                >
+                  Cover photo
+                </label>
+                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-3 dark:border-white/25">
+                  <div className="text-center">
+                    <PhotoIcon
+                      aria-hidden="true"
+                      className="mx-auto size-12 text-gray-300 dark:text-gray-600"
+                    />
+                    <div className="mt-4 flex text-sm/6 text-gray-600 dark:text-gray-400">
+                      <label
+                        htmlFor="fileUpload"
+                        className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:focus-within:outline-indigo-500 dark:hover:text-indigo-300"
+                      >
+                        <span>Upload a file</span>
+                        <input
+                          id="fileUpload"
+                          name="fileUpload"
+                          type="file"
+                          className="sr-only"
+                          accept="image/*"
+                        />
+                      </label>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs/5 text-gray-600 dark:text-gray-400">
+                      PNG, JPG, GIF up to 10MB
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {validationErrors && <p>{validationErrors}</p>}
+          {/* {validationErrors && <p>{validationErrors}</p>} */}
 
           {/* {validationErrors && (
             <ul>
@@ -257,7 +318,7 @@ export default function SupplyForm() {
             </ul>
           )} */}
 
-          <div className="w-full p-2 pt-6 rounded-md mb-2 flex items-center justify-center">
+          <div className="w-full p-2 rounded-md mb-2 flex items-center justify-center">
             <div className="w-md flex items-center justify-between">
               <button
                 className="flex bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 items-center gap-2"
