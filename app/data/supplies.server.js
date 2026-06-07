@@ -1,21 +1,71 @@
 import { ObjectId } from "mongodb";
 import { validateSupplyInput } from "./validation.server";
 import { getDb } from "./db.server";
+import uploadFileHandler from "~/data/upload-file-utility.server.mjs";
 
-export async function addSupply(supplyData) {
-  console.log("in supplies.server, supplyData is ", supplyData);
-  try {
-    // 3. Direct MongoDB Driver Usage
-    const result = await db.collection("rr7-supplies").insertOne({
-      supplyData,
-    });
-    console.log("result of insertOne is ", result);
+let supplyData;
 
-    console.log(`Inserted with ID: ${result.insertedId}`);
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+const supplyDataHandler = async ({ request }) => {
+  console.log("in supplyDataHandler");
+  const formData = await request.formData();
+  console.log("formData is ", formData);
+  // Custom logic to validate and process other form fields
+  supplyData = {
+    supplyType: formData.get("supplyType"),
+    description: formData.get("description"),
+    units: formData.get("units"),
+    location: formData.get("location"),
+    amount: Number(formData.get("amount")),
+    date: formData.get("date"),
+    // imageLocation: formData.get("fileUpload"), // This will be the value returned from uploadFileHandler
+  };
+  return supplyData;
+};
+
+export async function addSupply() {
+  // retreive the form data
+  console.log("SS-addSupply-1 in supplies.server, addSupply just started");
+
+  const supplyData = supplyDataHandler();
+  console.log(
+    "SS-addSupply-2 in supplies.server, returned from supplyDataHandler:",
+    supplyData,
+  );
+
+  // see if there is a file being submitted (photo)
+
+  // try {
+  //   const filename = await uploadFileHandler();
+  //   if (filename) {
+  //     console.log("returned from uploadFileHandler");
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  //   throw error;
+  // }
+
+  // try {
+  //   const db = await getDb();
+
+  //   // 3. Direct MongoDB Driver Usage
+  //   let insertResults;
+  //   insertResults = await db.collection("rr7-supplies").insertOne({
+  //     units: supplyData.units,
+  //     amount: supplyData.amount,
+  //     supplyType: supplyData.supplyType,
+  //     location: supplyData.location,
+  //     imageLocation:
+  //       "https://helpwithapi.com/supplies/blue-pot-12h-8w-small.jpeg",
+  //     description: supplyData.description,
+  //     createdAt: new Date(),
+  //     date: supplyData.date,
+  //   });
+
+  //   console.log(`Inserted with ID: ${insertResults.insertedId}`);
+  // } catch (error) {
+  //   console.log(error);
+  //   throw error;
+  // }
 }
 
 export async function deleteSupply(id) {
@@ -101,4 +151,22 @@ export async function updateSupply(id, supplyData) {
     );
     throw error;
   }
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  // Custom logic to validate and process other form fields
+
+  supplyData = {
+    supplyType: formData.get("supplyType"),
+    description: formData.get("description"),
+    units: formData.get("units"),
+    location: formData.get("location"),
+    amount: Number(formData.get("amount")),
+    date: formData.get("date"),
+    imageLocation: formData.get("fileUpload"), // This will be the value returned from uploadFileHandler
+  };
+  console.log("SS-action-1 in supplies.server, supplyData:", supplyData);
+  return supplyData;
+  //   await uploadFileHandler();
 }

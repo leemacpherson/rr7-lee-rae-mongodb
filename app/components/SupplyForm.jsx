@@ -310,13 +310,13 @@ export default function SupplyForm() {
 
           {/* {validationErrors && <p>{validationErrors}</p>} */}
 
-          {/* {validationErrors && (
+          {validationErrors && (
             <ul>
               {Object.values(validationErrors).map((error) => (
                 <li key={error}>{error}</li>
               ))}
             </ul>
-          )} */}
+          )}
 
           <div className="w-full p-2 rounded-md mb-2 flex items-center justify-center">
             <div className="w-md flex items-center justify-between">
