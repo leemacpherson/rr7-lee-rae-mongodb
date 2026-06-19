@@ -33,24 +33,16 @@ export default function SupplyForm() {
   const [selected, setSelected] = useState(locations[3]);
   const [supplyTypeEntry, setSupplyTypeEntry] = useState("");
 
-  console.log("we just entered SupplyForm");
-
   // const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
   const params = useParams();
   const paramsId = String(params.id);
   const matches = useMatches();
-  console.log("1. matches holds ", matches);
-  console.log("2. paramsId holds ", paramsId);
-  console.log("2a. paramsId is type ", typeof paramsId);
 
   const supplies = matches.find((match) => match.id === "routes/supplies").data
     .items;
-  console.log("3. supplies holds ", supplies);
 
   const supplyData = supplies.find((supply) => supply._id === paramsId);
-
-  console.log("6. supplyData holds ", supplyData);
 
   const navigation = useNavigation();
 
@@ -81,9 +73,6 @@ export default function SupplyForm() {
   // }
 
   const isSubmitting = navigation.state !== "idle";
-
-  console.log("7. defaultValues holds ", defaultValues);
-  console.log("7a. defaultValues holds ", defaultValues);
 
   return (
     <Form
