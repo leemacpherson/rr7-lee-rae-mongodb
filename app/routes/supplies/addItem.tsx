@@ -2,6 +2,8 @@ import { redirect, type ActionFunctionArgs, useNavigate } from "react-router";
 
 import Modal from "~/components/util/Modal";
 import SupplyForm from "~/components/SupplyForm";
+import { getDb } from "~/data/db.server";
+
 // try zod instead of my validation server
 // import { validateSupplyInput } from "~/data/validation.server";
 import { z } from "zod";
@@ -24,6 +26,10 @@ interface AddItemProps {
   request: Request;
 }
 
+interface SupplyFormProps {
+  params?: any;
+}
+
 // 1. Define the validation schema using Zod
 
 const ProfileSchema = z.object({
@@ -32,7 +38,8 @@ const ProfileSchema = z.object({
     .max(100, "Description must be at most 100 characters long"),
   supplyType: z
     .string()
-    .max(20, "Supply type must be at most 20 characters long"),
+    .max(20, "Supply type must be at most 20 characters long")
+    .min(2, "Supply type must be at least 2 characters long"),
   amount: z.coerce
     .number()
     .positive("Amount must be a positive number")
@@ -72,11 +79,7 @@ export default function addItem() {
   );
 }
 
-// 2. SERVER ACTION: Handles streaming, schema validation
-// and sending the new item to the database
 export async function action({ request }: ActionFunctionArgs) {
-  // create an empty array to hold validation errors
-  let validationErrorList: { message: string }[] = [];
   // a. Access the submitted body payload from the request
   const formData = await request.formData();
   const formDataObj = Object.fromEntries(formData);
@@ -90,39 +93,47 @@ export async function action({ request }: ActionFunctionArgs) {
     } else {
       console.error("no file uploaded or fileUpload is not a File instance");
     }
-    try {
-      // const validationResult = validateSupplyInput(formDataObj);
-    } catch (error) {
-      console.error("Error validating supply input: ", error);
-    }
   }
 
-  // b. Validate the input data against the Zod schema
-  try {
-    const validatedData = ProfileSchema.parse(formDataObj);
-    console.log("Validated data: ", validatedData);
-  } catch (validationError) {
-    if (validationError instanceof z.ZodError) {
-      // ZodError exposes the issues array which contains detailed error info
-      validationErrorList = validationError.issues.map((issue) => ({
-        message: issue.message,
-      }));
-      console.error("Validation error: ", validationError.issues);
-      return { success: false, errors: validationError.issues };
-    }
-
-    return {
-      success: false,
-      errors: [{ message: "Unexpected validation error" }],
-    };
+  // b. Validate the input data against the Zod schema using safeParse
+  const result = ProfileSchema.safeParse(formDataObj);
+  if (!result.success) {
+    const formattedErrors = z.treeifyError(result.error);
+    console.error("1. Validation error details:", formattedErrors);
+    return { success: false, errors: formattedErrors };
   }
 
-  // c. If validation passes, proceed to save the new item to the database
+  const validatedData = result.data;
+
+  // c. Handle file upload and save to DB
+  const fileUpload = validatedData.fileUpload as File;
+  const uploadedFilePath = await uploadFileHandler(fileUpload);
+
+  const imageLocation = `https://lee-rae-site.sfo3.digitaloceanspaces.com/${uploadedFilePath.url}`;
+  const supplyData = {
+    ...validatedData,
+    imageLocation: imageLocation,
+  };
+
+  console.log("2. SS-addSupply-1 in supplies.server, supplyData: ", supplyData);
+
   try {
-    // Simulate database save with a delay
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // console.log("New supply item saved to the database");
-    await uploadFileHandler(formDataObj.fileUpload);
+    const db = await getDb();
+    console.log(
+      "3. SS-addSupply-2 in supplies.server, about to insert supplyData: ",
+      supplyData,
+    );
+    const insertResults = await db.collection("rr7-supplies").insertOne({
+      amount: supplyData.amount,
+      supplyType: supplyData.supplyType,
+      imageLocation: supplyData.imageLocation,
+      description: supplyData.description,
+      createdAt: new Date(),
+      date: supplyData.date,
+    });
+
+    console.log(`Inserted with ID: ${insertResults.insertedId}`);
+    return redirect("/supplies");
   } catch (error) {
     console.error("Error saving supply item to the database: ", error);
     return {
@@ -130,7 +141,4 @@ export async function action({ request }: ActionFunctionArgs) {
       errors: [{ message: "Error saving supply item to the database" }],
     };
   }
-  return { success: true };
-
-  // --------------the section above is from the post-zod version
 }

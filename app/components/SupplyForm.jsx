@@ -1,8 +1,7 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import {
   Label,
   Listbox,
-  Transition,
   ListboxButton,
   ListboxOption,
   ListboxOptions,
@@ -31,20 +30,43 @@ const locations = [
 
 export default function SupplyForm() {
   const [selected, setSelected] = useState(locations[3]);
-  const [supplyTypeEntry, setSupplyTypeEntry] = useState("");
+  const actionData = useActionData();
 
-  // const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
-  const validationErrors = useActionData();
   const params = useParams();
   const paramsId = String(params.id);
   const matches = useMatches();
 
-  const supplies = matches.find((match) => match.id === "routes/supplies").data
-    .items;
+  let supplyData;
+  let validationErrors;
 
-  const supplyData = supplies.find((supply) => supply._id === paramsId);
+  if (matches) {
+    // Safely grab supplyData
+    const routeMatch = matches?.find((match) => match.id === "routes/supplies");
+    const supplies = routeMatch?.data?.items;
+    supplyData = supplies?.find((supply) => supply._id === paramsId);
+
+    if (actionData?.errors) {
+      // Access Zod's .flatten() or field errors safely
+      console.log("-------Validation Errors:", actionData.errors);
+      console.log(
+        "+++++++ supplyType error in Validation Errors:",
+        actionData.errors.properties.supplyType.errors[0],
+      );
+      validationErrors = actionData.errors.properties;
+      console.log(
+        "%%%%%%%%%% validationErrors in SupplyForm.jsx",
+        validationErrors,
+      );
+      console.log(
+        "^^^^^^^^^ validationErrors.supplyType in SupplyForm.jsx",
+        validationErrors.supplyType.errors[0],
+      );
+    }
+  }
 
   const navigation = useNavigation();
+
+  // const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
 
   const defaultValues = supplyData
     ? {
@@ -67,13 +89,11 @@ export default function SupplyForm() {
         fileUpload: "placeholder.jpg",
         date: "",
       };
-
-  // if (supplyData) {
-  //   setSupplyTypeEntry(supplyData.supplyType);
-  // }
+  const enteredAmount = actionData?.fields?.amount ?? defaultValues.amount;
+  const enteredUnits = actionData?.fields?.units ?? "cubic yards"; // or your default
 
   const isSubmitting = navigation.state !== "idle";
-
+  console.log(actionData, "actionData in SupplyForm.jsx");
   return (
     <Form
       method={supplyData ? "patch" : "post"}
@@ -85,7 +105,7 @@ export default function SupplyForm() {
         <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
           <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
             <div className="pl-4 py-8  border-slate-200">
-              <p>
+              <div>
                 <label
                   className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                   htmlFor="supplyType"
@@ -96,14 +116,17 @@ export default function SupplyForm() {
                   id="supplyType"
                   name="supplyType"
                   type="text"
-                  value={
-                    supplyTypeEntry ? supplyTypeEntry : defaultValues.supplyType
-                  }
-                  onChange={(e) => setSupplyTypeEntry(e.target.value)}
+                  defaultValue={defaultValues?.supplyType || ""}
                   placeholder="enter soil, pots, etc."
                   className="block w-1/2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                 />
-              </p>
+                {/* Render supply type validation errors if they exist */}
+                {validationErrors?.supplyType?.errors && (
+                  <p style={{ color: "red" }}>
+                    {validationErrors.supplyType.errors[0]}
+                  </p>
+                )}
+              </div>
 
               <p>
                 <label
@@ -122,6 +145,12 @@ export default function SupplyForm() {
                   required
                   defaultValue={defaultValues.amount}
                 />
+                {/* Render amount validation errors if they exist */}
+                {validationErrors?.amount?.errors && (
+                  <p style={{ color: "red" }}>
+                    {validationErrors.amount.errors[0]}
+                  </p>
+                )}
               </p>
 
               <div className="flex items-center gap-x-6 mt-4">
@@ -176,6 +205,12 @@ export default function SupplyForm() {
                   }
                 />
               </p>
+              {/* Render date validation errors if they exist */}
+              {validationErrors?.date?.errors && (
+                <p style={{ color: "red" }}>
+                  {validationErrors.date.errors[0]}
+                </p>
+              )}
 
               <div className=" fixed mt-1 mb-1 pt-2 pb-2 w-80 max-w-1/2 left-0. bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
                 <Listbox
@@ -232,12 +267,12 @@ export default function SupplyForm() {
                 <textarea
                   id="description"
                   name="description"
-                  rows={3}
+                  rows={2}
                   className="block w-full rounded-md bg-white px-3 mt-2 mb-2 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                   defaultValue={defaultValues.description}
                 />
               </p>
-
+              {/* 
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
@@ -257,20 +292,20 @@ export default function SupplyForm() {
                     Change
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-span-full">
                 <label
                   htmlFor="cover-photo"
                   className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                 >
-                  Cover photo
+                  Upload a photo of the supply item (optional)
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-3 dark:border-white/25">
                   <div className="text-center">
                     <PhotoIcon
                       aria-hidden="true"
-                      className="mx-auto size-12 text-gray-300 dark:text-gray-600"
+                      className="mx-auto size-8 text-gray-300 dark:text-gray-600"
                     />
                     <div className="mt-4 flex text-sm/6 text-gray-600 dark:text-gray-400">
                       <label
@@ -296,16 +331,6 @@ export default function SupplyForm() {
               </div>
             </div>
           </div>
-
-          {/* {validationErrors && <p>{validationErrors}</p>} */}
-
-          {validationErrors && (
-            <ul>
-              {Object.values(validationErrors).map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          )}
 
           <div className="w-full p-2 rounded-md mb-2 flex items-center justify-center">
             <div className="w-md flex items-center justify-between">

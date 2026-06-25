@@ -21,52 +21,53 @@ const supplyDataHandler = async ({ request }) => {
   };
   return supplyData;
 };
+// this happens in the action function in addItem.tsx, so we don't need it here
 
-export async function addSupply() {
-  // retreive the form data
-  console.log("SS-addSupply-1 in supplies.server, addSupply just started");
+// export async function addSupplyItem() {
+//   // retreive the form data
+//   console.log("SS-addSupply-1 in supplies.server, addSupply just started");
 
-  const supplyData = supplyDataHandler();
-  console.log(
-    "SS-addSupply-2 in supplies.server, returned from supplyDataHandler:",
-    supplyData,
-  );
+//   const supplyData = supplyDataHandler();
+//   console.log(
+//     "SS-addSupply-2 in supplies.server, returned from supplyDataHandler:",
+//     supplyData,
+//   );
 
-  // see if there is a file being submitted (photo)
+//   // see if there is a file being submitted (photo)
 
-  // try {
-  //   const filename = await uploadFileHandler();
-  //   if (filename) {
-  //     console.log("returned from uploadFileHandler");
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  //   throw error;
-  // }
+//   try {
+//     const filename = await uploadFileHandler();
+//     if (filename) {
+//       console.log("returned from uploadFileHandler");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
 
-  // try {
-  //   const db = await getDb();
+//   try {
+//     const db = await getDb();
 
-  //   // 3. Direct MongoDB Driver Usage
-  //   let insertResults;
-  //   insertResults = await db.collection("rr7-supplies").insertOne({
-  //     units: supplyData.units,
-  //     amount: supplyData.amount,
-  //     supplyType: supplyData.supplyType,
-  //     location: supplyData.location,
-  //     imageLocation:
-  //       "https://helpwithapi.com/supplies/blue-pot-12h-8w-small.jpeg",
-  //     description: supplyData.description,
-  //     createdAt: new Date(),
-  //     date: supplyData.date,
-  //   });
+//     // 3. Direct MongoDB Driver Usage
+//     let insertResults;
+//     insertResults = await db.collection("rr7-supplies").insertOne({
+//       units: supplyData.units,
+//       amount: supplyData.amount,
+//       supplyType: supplyData.supplyType,
+//       location: supplyData.location,
+//       imageLocation:
+//         "https://helpwithapi.com/supplies/blue-pot-12h-8w-small.jpeg",
+//       description: supplyData.description,
+//       createdAt: new Date(),
+//       date: supplyData.date,
+//     });
 
-  //   console.log(`Inserted with ID: ${insertResults.insertedId}`);
-  // } catch (error) {
-  //   console.log(error);
-  //   throw error;
-  // }
-}
+//     console.log(`Inserted with ID: ${insertResults.insertedId}`);
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
 
 export async function deleteSupply(id) {
   console.log("in supplies.server, deleteSupply just started, the id is ", id);
