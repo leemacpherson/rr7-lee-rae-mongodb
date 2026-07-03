@@ -42,6 +42,7 @@ export default function SupplyForm() {
   if (matches) {
     // Safely grab supplyData
     const routeMatch = matches?.find((match) => match.id === "routes/supplies");
+    console.log("routeMatch in SupplyForm.jsx", routeMatch);
     const supplies = routeMatch?.data?.items;
     supplyData = supplies?.find((supply) => supply._id === paramsId);
 

@@ -3,72 +3,6 @@ import { validateSupplyInput } from "./validation.server";
 import { getDb } from "./db.server";
 import uploadFileHandler from "~/data/upload-file-utility.server.mjs";
 
-let supplyData;
-
-const supplyDataHandler = async ({ request }) => {
-  console.log("in supplyDataHandler");
-  const formData = await request.formData();
-  console.log("formData is ", formData);
-  // Custom logic to validate and process other form fields
-  supplyData = {
-    supplyType: formData.get("supplyType"),
-    description: formData.get("description"),
-    units: formData.get("units"),
-    location: formData.get("location"),
-    amount: Number(formData.get("amount")),
-    date: formData.get("date"),
-    // imageLocation: formData.get("fileUpload"), // This will be the value returned from uploadFileHandler
-  };
-  return supplyData;
-};
-// this happens in the action function in addItem.tsx, so we don't need it here
-
-// export async function addSupplyItem() {
-//   // retreive the form data
-//   console.log("SS-addSupply-1 in supplies.server, addSupply just started");
-
-//   const supplyData = supplyDataHandler();
-//   console.log(
-//     "SS-addSupply-2 in supplies.server, returned from supplyDataHandler:",
-//     supplyData,
-//   );
-
-//   // see if there is a file being submitted (photo)
-
-//   try {
-//     const filename = await uploadFileHandler();
-//     if (filename) {
-//       console.log("returned from uploadFileHandler");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-
-//   try {
-//     const db = await getDb();
-
-//     // 3. Direct MongoDB Driver Usage
-//     let insertResults;
-//     insertResults = await db.collection("rr7-supplies").insertOne({
-//       units: supplyData.units,
-//       amount: supplyData.amount,
-//       supplyType: supplyData.supplyType,
-//       location: supplyData.location,
-//       imageLocation:
-//         "https://helpwithapi.com/supplies/blue-pot-12h-8w-small.jpeg",
-//       description: supplyData.description,
-//       createdAt: new Date(),
-//       date: supplyData.date,
-//     });
-
-//     console.log(`Inserted with ID: ${insertResults.insertedId}`);
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// }
-
 export async function deleteSupply(id) {
   console.log("in supplies.server, deleteSupply just started, the id is ", id);
 
@@ -89,10 +23,7 @@ export async function deleteSupply(id) {
 export async function getSupplies() {
   const db = await getDb();
   const data = await db.collection("rr7-supplies").find().toArray();
-  // console.log(
-  //   "LOADER in supplies.server, when we run getDb( what we get back is ",
-  //   data,
-  // );
+
   // Serialize _id to string for component usage
   return {
     items: data.map((i) => ({ ...i, _id: i._id.toString() })),

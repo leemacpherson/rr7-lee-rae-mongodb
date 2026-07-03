@@ -19,7 +19,7 @@ export default async function uploadFileHandler(fileUpload) {
   const s3Client = new S3Client({
     forcePathStyle: false, // Configures to use subdomain/virtual calling format.
     endpoint: "https://sfo3.digitaloceanspaces.com",
-    region: "us-east-1", // Required dummy value for SDK compatibility
+    region: "sfo3", // Required dummy value for SDK compatibility
     credentials: {
       accessKeyId: accessKeyId,
       secretAccessKey: secretAccessKey,

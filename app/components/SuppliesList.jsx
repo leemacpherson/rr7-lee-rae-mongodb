@@ -1,6 +1,7 @@
 import SupplyListItem from "./SupplyListItem";
 
 function SuppliesList({ supplies }) {
+  // console.log("@@@@@@@. SuppliesList supplies:", supplies);
   return (
     <div className="py-8">
       <h2 className="text-4xl font-bold text-grey-900 mb-6">Our Supplies</h2>
