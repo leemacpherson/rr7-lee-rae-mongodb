@@ -27,7 +27,7 @@ function SupplyListItem({
       );
     }
   }
-
+  // this seems unnecessary since the delete is handled in the action function in supplies.tsx, but leaving it here for now
   function deleteSupplyItemHandler() {
     const proceed = confirm("Are you sure? Do you want to delete this item?");
 
@@ -48,7 +48,7 @@ function SupplyListItem({
   }
 
   return (
-    <article>
+    <article className="bg-white">
       <h3 className="text-xl font-semibold text-indigo-700 mb-4">
         {supplyType}
       </h3>
@@ -57,7 +57,7 @@ function SupplyListItem({
         {amount} {units} in {location}
       </p>
       <h2 className=" text-indigo-700 mb-2">{description}</h2>
-      <div className="w-full md:w-1/4">
+      <div className="w-full md:w-1/2 lg:w-1/3 mb-4">
         <div className="overflow-hidden rounded-md shadow-xl">
           <img
             src={imageLocation}

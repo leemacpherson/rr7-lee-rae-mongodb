@@ -22,7 +22,6 @@ function isValidDate(value) {
 }
 
 export function validateSupplyInput(input) {
-  console.log("in validateSupplyInput, input is ", input);
   let validationErrors = [];
 
   if (!isValidType(input.supplyType)) {
@@ -52,13 +51,7 @@ export function validateSupplyInput(input) {
   //   validationErrors.imageLocation = "Invalid URL.";
   // }
 
-  console.log(
-    "9. in validateSupplyInput, right before returning to addItem the errors are",
-    validationErrors,
-  );
-
   if (Object.keys(validationErrors).length > 0) {
-    console.log("validation error is ", validationErrors);
     throw validationErrors;
   } else {
     return null;

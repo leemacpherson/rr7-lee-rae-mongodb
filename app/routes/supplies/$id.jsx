@@ -26,9 +26,9 @@ export default function UpdateSupplysPage() {
 
 export async function action({ params, request }) {
   const supplyId = params.id;
+  const supplyImageId = params.imageId;
 
   console.log("in $id.jsx and params is: ", params);
-  console.log("in $id.jsx and supplyId is: ", supplyId);
   console.log("in $id.jsx and request.method is: ", request.method);
 
   if (request.method === "PATCH") {

@@ -48,17 +48,17 @@ const ProfileSchema = z.object({
     const parsedDate = Date.parse(date);
     return !isNaN(parsedDate) && parsedDate <= Date.now();
   }, "Date must be a valid date in the past or present"),
-  fileUpload: z
-    .instanceof(File, { message: " picture is required" })
-    .refine((File) => File.size > 0, "File cannot be empty")
-    .refine(
-      (File) => File.size <= 10 * 1024 * 1024,
-      "File size must be under 10MB",
-    )
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "Only JPEG, PNG, and WebP images are allowed",
-    ),
+  // fileUpload: z
+  //   .instanceof(File, { message: " picture is required" })
+  //   .refine((File) => File.size > 0, "File cannot be empty")
+  //   .refine(
+  //     (File) => File.size <= 10 * 1024 * 1024,
+  //     "File size must be under 10MB",
+  //   )
+  //   .refine(
+  //     (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+  //     "Only JPEG, PNG, and WebP images are allowed",
+  //   ),
 });
 
 export default function addItem() {
@@ -83,6 +83,7 @@ export async function action({ request }: ActionFunctionArgs) {
   // a. Access the submitted body payload from the request
   const formData = await request.formData();
   const formDataObj = Object.fromEntries(formData);
+  console.log("SS-addSupply-0 in supplies.server, formDataObj: ", formDataObj);
 
   if (formDataObj) {
     if (
@@ -104,6 +105,11 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const validatedData = result.data;
+  console.log(
+    "1. SS-addSupply-0 in supplies.server, validatedData: ",
+    validatedData,
+  );
+  //  https://lee-rae-site.sfo3.digitaloceanspaces.com/bear-471x322.png
 
   // c. Handle file upload and save to DB
   const fileUpload = validatedData.fileUpload as File;

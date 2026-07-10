@@ -1,19 +1,29 @@
 import { ObjectId } from "mongodb";
 import { validateSupplyInput } from "./validation.server";
 import { getDb } from "./db.server";
-import uploadFileHandler from "~/data/upload-file-utility.server.mjs";
+import { deleteDOFile } from "~/data/s3.server";
 
 export async function deleteSupply(id) {
-  console.log("in supplies.server, deleteSupply just started, the id is ", id);
-
   try {
     const db = await getDb();
-    // const submittedId = `ObjectId('${id}')`; // Assuming id is already a string
-    // console.log("submittedId is ", submittedId);
+    const submittedId = `${id})`; // Assuming id is already a string
+    console.log("submittedId is ", submittedId);
+
+    // delete the associated image from S3.  Find the imageLocation in the database first, then delete it from S3
+    const supplyItem = await db.collection("rr7-supplies").findOne({
+      _id: new ObjectId(id), // Convert string to ObjectId
+    });
+
+    if (supplyItem && supplyItem.imageLocation) {
+      const imageLocation = supplyItem.imageLocation;
+      console.log("imageLocation is ", imageLocation);
+      await deleteDOFile(imageLocation);
+    }
+
+    // delete the supply item from the database
     const deletionResult = await db.collection("rr7-supplies").deleteOne({
       _id: new ObjectId(id), // Convert string to ObjectId
     });
-    console.log("deletionResult is ", deletionResult);
   } catch (error) {
     console.log(error);
     throw error;
@@ -31,9 +41,6 @@ export async function getSupplies() {
 }
 
 export async function updateSupply(id, supplyData) {
-  console.log(
-    `in supplies.server updateSupply and id is ${id} and supplyData is ${supplyData}`,
-  );
   try {
     const db = await getDb();
     const collection = db.collection("rr7-supplies");
@@ -44,15 +51,9 @@ export async function updateSupply(id, supplyData) {
     );
     // const data = await db.collection("rr7-supplies").find().toArray();
     const data = await db.collection("rr7-supplies").find().toArray();
-    console.log(
-      "8. in updateSupply just sent find to mongoDB in supplies.server ",
-    );
 
     try {
       validateSupplyInput(supplyData);
-      console.log(
-        "9a. in updateSupply try block, just ran validateSupplyInput and it did not throw an error",
-      );
     } catch (error) {
       console.log(
         "9b. in updateSupply catch block, just ran validateSupplyInput and it threw this error",
@@ -83,22 +84,4 @@ export async function updateSupply(id, supplyData) {
     );
     throw error;
   }
-}
-
-export async function action({ request }) {
-  const formData = await request.formData();
-  // Custom logic to validate and process other form fields
-
-  supplyData = {
-    supplyType: formData.get("supplyType"),
-    description: formData.get("description"),
-    units: formData.get("units"),
-    location: formData.get("location"),
-    amount: Number(formData.get("amount")),
-    date: formData.get("date"),
-    imageLocation: formData.get("fileUpload"), // This will be the value returned from uploadFileHandler
-  };
-  console.log("SS-action-1 in supplies.server, supplyData:", supplyData);
-  return supplyData;
-  //   await uploadFileHandler();
 }
