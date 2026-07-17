@@ -33,6 +33,7 @@ interface SupplyFormProps {
 // 1. Define the validation schema using Zod
 
 const ProfileSchema = z.object({
+  location: z.string().max(100, "location must be at most 100 characters long"),
   description: z
     .string()
     .max(100, "Description must be at most 100 characters long"),
@@ -48,18 +49,12 @@ const ProfileSchema = z.object({
     const parsedDate = Date.parse(date);
     return !isNaN(parsedDate) && parsedDate <= Date.now();
   }, "Date must be a valid date in the past or present"),
-  // fileUpload: z
-  //   .instanceof(File, { message: " picture is required" })
-  //   .refine((File) => File.size > 0, "File cannot be empty")
-  //   .refine(
-  //     (File) => File.size <= 10 * 1024 * 1024,
-  //     "File size must be under 10MB",
-  //   )
-  //   .refine(
-  //     (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-  //     "Only JPEG, PNG, and WebP images are allowed",
-  //   ),
+  fileUpload: z.any().optional(),
 });
+
+// declare the default image location for the supply item
+const defaultImageLocation =
+  "https://lee-rae-site.sfo3.digitaloceanspaces.com/default-supply-image.png";
 
 export default function addItem() {
   const navigate = useNavigate();
@@ -81,55 +76,61 @@ export default function addItem() {
 
 export async function action({ request }: ActionFunctionArgs) {
   // a. Access the submitted body payload from the request
+  let fileAttached = false;
+  let imageLocation = defaultImageLocation; // Default image location
   const formData = await request.formData();
   const formDataObj = Object.fromEntries(formData);
-  console.log("SS-addSupply-0 in supplies.server, formDataObj: ", formDataObj);
 
   if (formDataObj) {
     if (
       formDataObj.fileUpload instanceof File &&
       formDataObj.fileUpload.size > 0
     ) {
-      console.log("fileUpload: ", formDataObj.fileUpload);
+      fileAttached = true;
     } else {
-      console.error("no file uploaded or fileUpload is not a File instance");
+      fileAttached = false;
     }
   }
 
   // b. Validate the input data against the Zod schema using safeParse
   const result = ProfileSchema.safeParse(formDataObj);
+
   if (!result.success) {
     const formattedErrors = z.treeifyError(result.error);
-    console.error("1. Validation error details:", formattedErrors);
+    console.error("1. Validation error details");
     return { success: false, errors: formattedErrors };
   }
 
   const validatedData = result.data;
-  console.log(
-    "1. SS-addSupply-0 in supplies.server, validatedData: ",
-    validatedData,
-  );
-  //  https://lee-rae-site.sfo3.digitaloceanspaces.com/bear-471x322.png
 
   // c. Handle file upload and save to DB
-  const fileUpload = validatedData.fileUpload as File;
-  const uploadedFilePath = await uploadFileHandler(fileUpload);
+  if (fileAttached) {
+    const fileUpload = validatedData.fileUpload as File;
+    const uploadedFilePath = await uploadFileHandler(fileUpload);
+    imageLocation = `https://lee-rae-site.sfo3.digitaloceanspaces.com/${uploadedFilePath.url}`;
+  } else {
+    imageLocation =
+      "https://lee-rae-site.sfo3.digitaloceanspaces.com/default-supply-image.png";
+  }
 
-  const imageLocation = `https://lee-rae-site.sfo3.digitaloceanspaces.com/${uploadedFilePath.url}`;
   const supplyData = {
     ...validatedData,
     imageLocation: imageLocation,
   };
 
-  console.log("2. SS-addSupply-1 in supplies.server, supplyData: ", supplyData);
+  console.log(
+    "4. SS-addSupply-1 in addItem's action, supplyData: ",
+    supplyData,
+  );
 
   try {
     const db = await getDb();
     console.log(
-      "3. SS-addSupply-2 in supplies.server, about to insert supplyData: ",
+      "5. SS-addSupply-2 in addItem's action, about to insert supplyData: ",
       supplyData,
     );
     const insertResults = await db.collection("rr7-supplies").insertOne({
+      location: supplyData.location,
       amount: supplyData.amount,
       supplyType: supplyData.supplyType,
       imageLocation: supplyData.imageLocation,

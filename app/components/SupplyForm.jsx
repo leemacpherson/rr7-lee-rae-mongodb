@@ -1,12 +1,6 @@
 import { useState } from "react";
-import {
-  Label,
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-} from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+
+// import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 
 import {
@@ -18,18 +12,8 @@ import {
   useNavigation,
 } from "react-router";
 
-const locations = [
-  { id: 1, name: "unspecified location" },
-  { id: 2, name: "big shed in lower yard" },
-  { id: 3, name: "small shed in lower yard" },
-  { id: 4, name: "in basement" },
-  { id: 5, name: "under kitchen under house" },
-  { id: 6, name: "laundry room cabinet right side" },
-  { id: 7, name: "laundry room cabinet left side" },
-];
-
 export default function SupplyForm() {
-  const [selected, setSelected] = useState(locations[3]);
+  // const [selected, setSelected] = useState(locations[3]);
   const actionData = useActionData();
 
   const params = useParams();
@@ -46,23 +30,23 @@ export default function SupplyForm() {
     const supplies = routeMatch?.data?.items;
     supplyData = supplies?.find((supply) => supply._id === paramsId);
 
-    if (actionData?.errors) {
-      // Access Zod's .flatten() or field errors safely
-      console.log("-------Validation Errors:", actionData.errors);
-      console.log(
-        "+++++++ supplyType error in Validation Errors:",
-        actionData.errors.properties.supplyType.errors[0],
-      );
-      validationErrors = actionData.errors.properties;
-      console.log(
-        "%%%%%%%%%% validationErrors in SupplyForm.jsx",
-        validationErrors,
-      );
-      console.log(
-        "^^^^^^^^^ validationErrors.supplyType in SupplyForm.jsx",
-        validationErrors.supplyType.errors[0],
-      );
-    }
+    // if (actionData?.errors) {
+    //   // Access Zod's .flatten() or field errors safely
+    //   console.log("-------Validation Errors:", actionData.errors);
+    //   console.log(
+    //     "+++++++ supplyType error in Validation Errors:",
+    //     actionData.errors.properties.supplyType.errors[0],
+    //   );
+    //   validationErrors = actionData.errors.properties;
+    //   console.log(
+    //     "%%%%%%%%%% validationErrors in SupplyForm.jsx",
+    //     validationErrors,
+    //   );
+    //   console.log(
+    //     "^^^^^^^^^ validationErrors.supplyType in SupplyForm.jsx",
+    //     validationErrors.supplyType.errors[0],
+    //   );
+    // }
   }
 
   const navigation = useNavigation();
@@ -90,8 +74,10 @@ export default function SupplyForm() {
         fileUpload: "placeholder.jpg",
         date: "",
       };
-  const enteredAmount = actionData?.fields?.amount ?? defaultValues.amount;
-  const enteredUnits = actionData?.fields?.units ?? "cubic yards"; // or your default
+  // The ?? defaultValues.amount checks if the expression on the left is nullish (meaning strictly null or undefined). If it is, it uses defaultValues.amount instead.
+
+  // const enteredAmount = actionData?.fields?.amount ?? defaultValues.amount;
+  // const enteredUnits = actionData?.fields?.units ?? "cubic yards"; // or your default
 
   const isSubmitting = navigation.state !== "idle";
   console.log(actionData, "actionData in SupplyForm.jsx");
@@ -101,6 +87,7 @@ export default function SupplyForm() {
       encType="multipart/form-data"
       id="expense-form"
       className="pl-10 display: block min-h-dvh "
+      noValidate
     >
       <div className="space-y-14 ">
         <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
@@ -142,7 +129,7 @@ export default function SupplyForm() {
                   id="amount"
                   name="amount"
                   min="0"
-                  step="1"
+                  step=".5"
                   required
                   defaultValue={defaultValues.amount}
                 />
@@ -213,49 +200,53 @@ export default function SupplyForm() {
                 </p>
               )}
 
-              <div className="relative mt-1 mb-1 pt-2 w-80 max-w-1/2 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
-                <Listbox
-                  name="location"
-                  value={selected.name}
-                  defaultValue={defaultValues.location}
-                  onChange={setSelected}
-                >
-                  <Label className="block text-sm/6 font-medium text-gray-900 dark:text-white">
-                    Located in...
-                  </Label>
-                  <div className="relative mt-2">
-                    <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus-visible:outline-indigo-500">
-                      <span className="col-start-1 row-start-1 truncate pr-6">
-                        {selected.name}
-                      </span>
-                      <ChevronUpDownIcon
-                        aria-hidden="true"
-                        className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
-                      />
-                    </ListboxButton>
-
-                    <ListboxOptions
-                      transition
-                      className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline-1 outline-black/5 data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
-                    >
-                      {locations.map((person) => (
-                        <ListboxOption
-                          key={person.id}
-                          value={person}
-                          className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden dark:text-white dark:data-focus:bg-indigo-500"
-                        >
-                          <span className="block truncate font-normal group-data-selected:font-semibold">
-                            {person.name}
-                          </span>
-
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white dark:text-indigo-400">
-                            <CheckIcon aria-hidden="true" className="size-5" />
-                          </span>
-                        </ListboxOption>
-                      ))}
-                    </ListboxOptions>
-                  </div>
-                </Listbox>
+              <div className="flex items-center gap-x-6 mt-4">
+                <div className="flex items-center gap-x-3">
+                  <input
+                    defaultChecked
+                    id="large shed"
+                    name="location"
+                    type="radio"
+                    value="large shed"
+                    className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:before:bg-white/20 forced-colors:appearance-auto forced-colors:before:hidden"
+                  />
+                  <label
+                    htmlFor="large shed"
+                    className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                  >
+                    Large Shed
+                  </label>
+                </div>
+                <div className="flex items-center gap-x-3">
+                  <input
+                    id="small shed"
+                    name="location"
+                    type="radio"
+                    value="small shed"
+                    className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:before:bg-white/20 forced-colors:appearance-auto forced-colors:before:hidden"
+                  />
+                  <label
+                    htmlFor="small shed"
+                    className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                  >
+                    Small Shed
+                  </label>
+                </div>
+                <div className="flex items-center gap-x-3">
+                  <input
+                    id="laundry room cabinet"
+                    name="location"
+                    type="radio"
+                    value="laundry room cabinet"
+                    className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:before:bg-white/20 forced-colors:appearance-auto forced-colors:before:hidden"
+                  />
+                  <label
+                    htmlFor="laundry room cabinet"
+                    className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                  >
+                    Laundry Room Cabinet
+                  </label>
+                </div>
               </div>
 
               <p>
