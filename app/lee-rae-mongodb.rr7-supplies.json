@@ -1,0 +1,76 @@
+[
+  {
+    "_id": {
+      "$oid": "6a49a7e6c09996e708a9cc1c"
+    },
+    "amount": "1",
+    "supplyType": "Sign",
+    "imageLocation": "https://lee-rae-site.sfo3.digitaloceanspaces.com/1783212005878-image.jpg",
+    "description": "Safari is notoriously strict with rendering states. Sometimes a React component successfully updates the DOM, but Safari physically refuses to paint it unless it triggers a layout recalculation.",
+    "createdAt": {
+      "$date": "2026-07-05T00:40:06.468Z"
+    },
+    "date": "2026-07-04",
+    "location": "in basement",
+    "units": "cubic yards"
+  },
+  {
+    "_id": {
+      "$oid": "6a4a7f0bc09996e708a9cc1d"
+    },
+    "amount": "1",
+    "supplyType": "Sunday 1",
+    "imageLocation": "https://lee-rae-site.sfo3.digitaloceanspaces.com/1783267083311-faucet - 1.jpeg",
+    "description": "Safari is notoriously strict with rendering states. Sometimes a React component successfully updates the DOM, but Safari physically refuses to paint it unless it triggers a layout recalculation.",
+    "createdAt": {
+      "$date": "2026-07-05T15:58:03.545Z"
+    },
+    "date": "2026-01-01",
+    "location": "in basement",
+    "units": "cubic yards"
+  },
+  {
+    "_id": {
+      "$oid": "6a4a90ebc09996e708a9cc1e"
+    },
+    "amount": "1",
+    "supplyType": "Plant",
+    "imageLocation": "https://lee-rae-site.sfo3.digitaloceanspaces.com/1783271659060-IMG_1006.jpeg",
+    "description": "Safari is notoriously strict with rendering states. Sometimes a React component successfully updates the DOM, but Safari physically refuses to paint it unless it triggers a layout recalculation.",
+    "createdAt": {
+      "$date": "2026-07-05T17:14:19.574Z"
+    },
+    "date": "2026-07-01",
+    "location": "in basement",
+    "units": "cubic yards"
+  },
+  {
+    "_id": {
+      "$oid": "6a4f2411c09996e708a9cc20"
+    },
+    "amount": "1",
+    "supplyType": "Printer",
+    "imageLocation": "https://lee-rae-site.sfo3.digitaloceanspaces.com/1783571473546-IMG_1004.jpeg",
+    "description": "Safari is notoriously strict with rendering states. Sometimes a React component successfully updates the DOM, but Safari physically refuses to paint it unless it triggers a layout recalculation.",
+    "createdAt": {
+      "$date": "2026-07-09T04:31:13.909Z"
+    },
+    "date": "2026-07-08",
+    "location": "in basement",
+    "units": "cubic yards"
+  },
+  {
+    "_id": {
+      "$oid": "6a58fae598261e9e989fcf6a"
+    },
+    "location": "large shed",
+    "amount": 1,
+    "supplyType": "Thursday 6",
+    "imageLocation": "https://lee-rae-site.sfo3.digitaloceanspaces.com/default-supply-image.jpg",
+    "description": "kjhdfkdsjhf",
+    "createdAt": {
+      "$date": "2026-07-16T15:38:13.679Z"
+    },
+    "date": "2026-01-01"
+  }
+]

@@ -1,6 +1,6 @@
 import { Link, useFetcher } from "react-router";
 
-function SupplyListItem({
+function PlantsListItem({
   id,
   description,
   amount,
@@ -9,9 +9,9 @@ function SupplyListItem({
   imageLocation,
   units,
 }) {
-  // fetcher is used to submit the delete request to the server without navigating away from the current page
+  // const submit = useSubmit();
   const fetcher = useFetcher();
-  console.log("in SupplyListItem, the fetcher holds ", fetcher);
+  // console.log("in SupplyListItem, the fetcher holds ", fetcher);
   let amountInt = parseInt(amount, 10);
 
   function editSupplyItemHandler() {
@@ -48,7 +48,7 @@ function SupplyListItem({
   }
 
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-lg p-6 transition-colors duration-300 shadow-md dark:shadow-gray-900/50">
+    <article className="bg-white dark:bg-gray-800 p-6 rounded-lg transition-colors duration-300">
       <h3 className="text-xl font-semibold text-indigo-700 dark:text-indigo-400 mb-4">
         {supplyType}
       </h3>
@@ -62,10 +62,10 @@ function SupplyListItem({
       </h2>
 
       <div className="w-full md:w-1/2 lg:w-1/3 mb-4">
-        <div className="overflow-hidden rounded-md shadow-xl border dark:border-gray-700">
+        <div className="overflow-hidden rounded-md shadow-xl dark:shadow-gray-900/50">
           <img
             src={imageLocation}
-            alt="Explore supplies"
+            alt="Explore plants"
             className="w-full h-auto"
           />
         </div>
@@ -73,14 +73,14 @@ function SupplyListItem({
 
       <menu className="flex gap-2 mt-4">
         <button
-          className="inline-block bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-opacity-75"
+          className="inline-block bg-purple-600 hover:bg-purple-700 dark:hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-opacity-75"
           onClick={deleteSupplyItemHandler}
         >
           Delete
         </button>
 
         <Link
-          className="inline-block bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-opacity-75"
+          className="inline-block bg-purple-600 hover:bg-purple-700 dark:hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-opacity-75"
           to={`/supplies/${id}`}
         >
           Edit
@@ -90,4 +90,4 @@ function SupplyListItem({
   );
 }
 
-export default SupplyListItem;
+export default PlantsListItem;

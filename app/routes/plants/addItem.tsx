@@ -1,7 +1,7 @@
 import { redirect, type ActionFunctionArgs, useNavigate } from "react-router";
 
 import Modal from "~/components/util/Modal";
-import SupplyForm from "~/components/SupplyForm";
+import PlantForm from "~/components/PlantForm";
 import { getDb } from "~/data/db.server";
 
 // try zod instead of my validation server
@@ -10,11 +10,11 @@ import { z } from "zod";
 
 import uploadFileHandler from "~/data/upload-file-utility.server.mjs";
 
-interface Supply {
+interface Plant {
   _id: string;
   description: string;
-  units: string;
-  type: string;
+  plantName: string;
+  plantType: string;
   imageLocation: string;
   location: string;
   amount: number;
@@ -26,21 +26,20 @@ interface AddItemProps {
   request: Request;
 }
 
-interface SupplyFormProps {
+interface PlantFormProps {
   params?: any;
 }
 
 // 1. Define the validation schema using Zod
-
 const ProfileSchema = z.object({
   location: z.string().max(100, "location must be at most 100 characters long"),
   description: z
     .string()
     .max(100, "Description must be at most 100 characters long"),
-  supplyType: z
+  plantType: z
     .string()
-    .max(20, "Supply type must be at most 20 characters long")
-    .min(2, "Supply type must be at least 2 characters long"),
+    .max(20, "Plant type must be at most 20 characters long")
+    .min(2, "Plant type must be at least 2 characters long"),
   amount: z.coerce
     .number()
     .positive("Amount must be a positive number")
@@ -54,7 +53,7 @@ const ProfileSchema = z.object({
 
 // declare the default image location for the supply item
 const defaultImageLocation =
-  "https://lee-rae-site.sfo3.digitaloceanspaces.com/pictures/supplies/default-supply-image.jpg";
+  "https://lee-rae-site.sfo3.digitaloceanspaces.com/pictures/plants/default-plant-image.jpg";
 
 export default function addItem() {
   const navigate = useNavigate();
@@ -67,7 +66,7 @@ export default function addItem() {
   return (
     <>
       <Modal>
-        <SupplyForm />
+        <PlantForm />
       </Modal>
       <h2>This is addItem after modal</h2>
     </>
@@ -75,13 +74,14 @@ export default function addItem() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const mode = "supplies"; // Tells the uploadFileHandler to save the file in the supplies folder in DO Spaces
+  const mode = "plants"; // Tells the uploadFileHandler to save the file in the plants folder in DO Spaces
 
-  // a. Access the submitted body payload from the request
+  // // a. Access the submitted body payload from the request
   let fileAttached = false;
   let imageLocation = defaultImageLocation; // Default image location
   const formData = await request.formData();
   const formDataObj = Object.fromEntries(formData);
+  console.log("0. plants addItem's action, formDataObj: ", formDataObj);
 
   if (formDataObj) {
     if (
@@ -109,49 +109,42 @@ export async function action({ request }: ActionFunctionArgs) {
   if (fileAttached) {
     const fileUpload = validatedData.fileUpload as File;
     const uploadedFilePath = await uploadFileHandler(fileUpload, mode);
-    console.log(
-      "3. SS-addSupply-2 in addItem's action, uploadedFilePath: ",
-      uploadedFilePath,
-    );
     imageLocation = `https://lee-rae-site.sfo3.digitaloceanspaces.com/${uploadedFilePath.url}`;
   } else {
     imageLocation =
-      "https://lee-rae-site.sfo3.digitaloceanspaces.com/pictures/supplies/default-supply-image.jpg";
+      "https://lee-rae-site.sfo3.digitaloceanspaces.com/pictures/plants/default-plant-image.jpg";
   }
 
-  const supplyData = {
+  const plantData = {
     ...validatedData,
     imageLocation: imageLocation,
   };
 
-  console.log(
-    "4. SS-addSupply-1 in addItem's action, supplyData: ",
-    supplyData,
-  );
+  console.log("4. SS-addPlant-1 in addItem's action, plantData: ", plantData);
 
   try {
     const db = await getDb();
     console.log(
-      "5. SS-addSupply-2 in addItem's action, about to insert supplyData: ",
-      supplyData,
+      "5. Plant addItem's action, about to insert plantData: ",
+      plantData,
     );
-    const insertResults = await db.collection("rr7-supplies").insertOne({
-      location: supplyData.location,
-      amount: supplyData.amount,
-      supplyType: supplyData.supplyType,
-      imageLocation: supplyData.imageLocation,
-      description: supplyData.description,
+    const insertResults = await db.collection("rr7-plants").insertOne({
+      location: plantData.location,
+      amount: plantData.amount,
+      plantType: plantData.plantType,
+      imageLocation: plantData.imageLocation,
+      description: plantData.description,
       createdAt: new Date(),
-      date: supplyData.date,
+      date: plantData.date,
     });
 
     console.log(`Inserted with ID: ${insertResults.insertedId}`);
-    return redirect("/supplies");
+    return redirect("/plants");
   } catch (error) {
-    console.error("Error saving supply item to the database: ", error);
+    console.error("Error saving the plant item to the database: ", error);
     return {
       success: false,
-      errors: [{ message: "Error saving supply item to the database" }],
+      errors: [{ message: "Error saving plant item to the database" }],
     };
   }
 }

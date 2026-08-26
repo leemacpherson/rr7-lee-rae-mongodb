@@ -17,7 +17,7 @@ export default function UpdateSupplysPage() {
 
   return (
     <Modal onClose={closeHandler}>
-      <SupplyForm />
+      <PlantForm />
     </Modal>
   );
 }
@@ -25,6 +25,7 @@ export default function UpdateSupplysPage() {
 export async function action({ params, request }) {
   const supplyId = params.id;
   const supplyImageId = params.imageId;
+  const mode = "plant";
 
   console.log("in $id.jsx and params is: ", params);
   console.log("in $id.jsx and request.method is: ", request.method);
@@ -45,10 +46,10 @@ export async function action({ params, request }) {
     }
 
     await updateSupply(supplyId, supplyData);
-    return redirect("/supplies");
+    return redirect("/plants");
   } else if (request.method === "DELETE") {
     console.log("in $id, the delete request holds ", request);
-    await deleteItem(supplyId, "supply");
+    await deleteItem(supplyId, mode);
     return { deletedId: supplyId };
   }
 }

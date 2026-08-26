@@ -86,13 +86,13 @@ export default function SupplyForm() {
       method={supplyData ? "patch" : "post"}
       encType="multipart/form-data"
       id="expense-form"
-      className="pl-10 display: block min-h-dvh "
+      className="pl-10 block min-h-dvh bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-200"
       noValidate
     >
-      <div className="space-y-14 ">
+      <div className="space-y-14">
         <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
           <div className="border-b border-gray-900/10 pb-12 dark:border-white/10">
-            <div className="pl-4 py-4ß  border-slate-200">
+            <div className="pl-4 py-4 border-b border-slate-200 dark:border-slate-800">
               <div>
                 <label
                   className="block text-sm/6 font-medium text-gray-900 dark:text-white"
@@ -108,15 +108,14 @@ export default function SupplyForm() {
                   placeholder="enter soil, pots, etc."
                   className="block w-1/2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                 />
-                {/* Render supply type validation errors if they exist */}
                 {validationErrors?.supplyType?.errors && (
-                  <p style={{ color: "red" }}>
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                     {validationErrors.supplyType.errors[0]}
                   </p>
                 )}
               </div>
 
-              <p>
+              <p className="mt-4">
                 <label
                   htmlFor="amount"
                   className="block text-sm/6 font-medium text-gray-900 dark:text-white"
@@ -133,9 +132,8 @@ export default function SupplyForm() {
                   required
                   defaultValue={defaultValues.amount}
                 />
-                {/* Render amount validation errors if they exist */}
                 {validationErrors?.amount?.errors && (
-                  <p style={{ color: "red" }}>
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                     {validationErrors.amount.errors[0]}
                   </p>
                 )}
@@ -175,15 +173,15 @@ export default function SupplyForm() {
                 </div>
               </div>
 
-              <p>
+              <p className="mt-4">
                 <label
                   htmlFor="date"
-                  className="mt-4 block text-sm/6 font-medium text-gray-900 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                 >
                   Date
                 </label>
                 <input
-                  className="block w-1/2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
+                  className="block w-1/2 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500 dark:scheme-dark"
                   type="date"
                   id="date"
                   name="date"
@@ -192,13 +190,12 @@ export default function SupplyForm() {
                     defaultValues.date ? defaultValues.date.slice(0, 10) : ""
                   }
                 />
+                {validationErrors?.date?.errors && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {validationErrors.date.errors[0]}
+                  </p>
+                )}
               </p>
-              {/* Render date validation errors if they exist */}
-              {validationErrors?.date?.errors && (
-                <p style={{ color: "red" }}>
-                  {validationErrors.date.errors[0]}
-                </p>
-              )}
 
               <div className="flex items-center gap-x-6 mt-4">
                 <div className="flex items-center gap-x-3">
@@ -249,9 +246,9 @@ export default function SupplyForm() {
                 </div>
               </div>
 
-              <p>
+              <p className="mt-4">
                 <label
-                  className="block pt-2 mt-4 text-sm/6 font-medium py-2 text-gray-900 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                   htmlFor="description"
                 >
                   Description of the supply item
@@ -260,31 +257,28 @@ export default function SupplyForm() {
                   id="description"
                   name="description"
                   rows={2}
-                  className="block w-full rounded-md bg-white px-1 mt-2 mb-2 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 mt-2 mb-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                   defaultValue={defaultValues.description}
                 />
               </p>
 
-              {/* this section is for allowing for the image to be changed 
-              see the older versions of this component for the code that was there */}
-
-              <div className="col-span-full">
+              <div className="col-span-full mt-4">
                 <label
                   htmlFor="cover-photo"
                   className="block text-sm/6 font-medium text-gray-900 dark:text-white"
                 >
                   Upload a photo of the supply item (optional)
                 </label>
-                <div className="flex relative justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-3 dark:border-white/25">
+                <div className="flex relative justify-center rounded-lg border border-dashed border-gray-900/25 dark:border-white/20 px-6 py-6 transition-colors dark:hover:border-white/40">
                   <div className="text-center">
                     <PhotoIcon
                       aria-hidden="true"
-                      className="mx-auto size-8 text-gray-300 dark:text-gray-600"
+                      className="mx-auto size-8 text-gray-400 dark:text-gray-500"
                     />
-                    <div className="flex text-sm/6 text-gray-600 dark:text-gray-400">
+                    <div className="flex text-sm/6 text-gray-600 dark:text-gray-400 mt-2">
                       <label
                         htmlFor="fileUpload"
-                        className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:focus-within:outline-indigo-500 dark:hover:text-indigo-300"
+                        className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-2 focus-within:outline-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 dark:focus-within:outline-indigo-500"
                       >
                         <span>Upload a file</span>
                         <input
@@ -297,7 +291,7 @@ export default function SupplyForm() {
                       </label>
                       <p className="pl-1">or drag and drop</p>
                     </div>
-                    <p className="text-xs/5 text-gray-600 dark:text-gray-400">
+                    <p className="text-xs/5 text-gray-500 dark:text-gray-400 mt-1">
                       PNG, JPG, GIF up to 10MB
                     </p>
                   </div>
@@ -306,21 +300,20 @@ export default function SupplyForm() {
             </div>
           </div>
 
-          <div className="w-full p-0.5 rounded-md flex items-center justify-center">
-            <div className="w-md flex items-center justify-between">
-              <button
-                className="flex bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 items-center gap-2"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Saving..." : "Save Expense"}
-              </button>
-              <Link
-                className="flex bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 items-center gap-2 mr-2"
-                to=".."
-              >
-                Cancel
-              </Link>
-            </div>
+          <div className="w-full p-4 flex items-center justify-end gap-x-4">
+            <Link
+              className="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition duration-200"
+              to=".."
+            >
+              Cancel
+            </Link>
+            <button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white font-semibold py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Expense"}
+            </button>
           </div>
         </div>
       </div>

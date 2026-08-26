@@ -1,13 +1,13 @@
 import { useLoaderData, Outlet, Link } from "react-router";
 import { FaPlus, FaDownload } from "react-icons/fa";
-import SuppliesList from "~/components/SuppliesList";
+import PlantsList from "~/components/PlantsList";
 import type { ActionFunctionArgs } from "react-router";
 
 // Import safely from your server-only file
 import { getPresignedDownloadUrl } from "~/data/s3.server";
 import { getSupplies } from "~/data/items.server";
 
-interface Supply {
+interface Plants {
   _id: string;
   description: string;
   amount: string;
@@ -19,21 +19,22 @@ interface Supply {
 }
 
 interface LoaderData {
-  items: Supply[];
+  items: Plants[];
 }
 
 // Server-side loader: Fetches data from MongoDB AND generates URLs
 export async function loader(): Promise<LoaderData> {
-  console.log("SUPPLIES LOADER");
-  let mode = "supplies"; // Default mode for supplies
+  console.log("PLANTS LOADER");
 
-  const collectionName = "rr7-supplies"; // Specify your collection name
+  let mode = "plants"; // Default mode for plants
 
-  const suppliesData = (await getSupplies({ collectionName })) as
-    | { items?: Supply[] }
+  const collectionName = "rr7-plants"; // Specify your collection name
+
+  const plantsData = (await getSupplies({ collectionName })) as
+    | { items?: Plants[] }
     | undefined;
 
-  const items = suppliesData?.items ?? []; // If suppliesData is null or undefined, default to an empty array
+  const items = plantsData?.items ?? []; // If plantsData is null or undefined, default to an empty array
 
   // Map every item in your array to resolve its signed download URL concurrently
   // wrap your .map() block inside a Promise.all() to prevent your loader from resolving early.
@@ -51,7 +52,7 @@ export async function loader(): Promise<LoaderData> {
           item.imageLocation,
           mode,
         );
-        // console.log(`Secure URL for item ${item._id}:`, secureUrl);
+
         const updatedItem = { ...item, imageLocation: secureUrl };
 
         return updatedItem;
@@ -66,10 +67,10 @@ export async function loader(): Promise<LoaderData> {
 }
 
 export function HydrateFallback() {
-  return <p>Loading Supplies...</p>;
+  return <p>Loading Plants...</p>;
 }
 
-export default function Supplies() {
+export default function Plants() {
   // TypeScript now infers the type safely from the loader return
   const { items } = useLoaderData<typeof loader>();
   // console.log(".   $$$$.  Supplies items:", items);
@@ -85,12 +86,12 @@ export default function Supplies() {
               className="flex bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 items-center gap-2"
             >
               <FaPlus />
-              <span>Add a Supply</span>
+              <span>Add Plant</span>
             </Link>
           </div>
         </section>
         {/* Safely pass the actual array down */}
-        <SuppliesList supplies={items} />
+        <PlantsList plants={items} />
       </main>
     </>
   );
@@ -100,8 +101,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   // Custom logic to validate and process other form fields
 
-  const supplyData = {
-    supplyType: formData.get("supplyType"),
+  const plantsData = {
+    plantName: formData.get("plantName"),
     description: formData.get("description"),
     units: formData.get("units"),
     location: formData.get("location"),
@@ -109,6 +110,6 @@ export async function action({ request }: ActionFunctionArgs) {
     date: formData.get("date"),
     imageLocation: formData.get("fileUpload"), // This will be the value returned from uploadFileHandler
   };
-  console.log("SS-action-1 in supplies.server, supplyData:", supplyData);
-  return supplyData;
+  console.log("SS-action-1 in supplies.server, supplyData:", plantsData);
+  return plantsData;
 }

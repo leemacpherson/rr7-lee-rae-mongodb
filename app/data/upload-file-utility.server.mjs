@@ -3,7 +3,7 @@ import { Upload } from "@aws-sdk/lib-storage";
 
 // import { type ActionFunctionArgs } from "react-router";
 
-export default async function uploadFileHandler(fileUpload) {
+export default async function uploadFileHandler(fileUpload, mode) {
   // Custom logic to stream the file to your storage provider
   // Initialize the S3 client using environment variables
 
@@ -16,6 +16,7 @@ export default async function uploadFileHandler(fileUpload) {
 
   let result = "test";
 
+  // 1. Initialize your S3 / DigitalOcean Spaces Client
   const s3Client = new S3Client({
     forcePathStyle: false, // Configures to use subdomain/virtual calling format.
     endpoint: "https://sfo3.digitaloceanspaces.com",
@@ -35,10 +36,21 @@ export default async function uploadFileHandler(fileUpload) {
     const timestamp = Date.now();
     const fileKey = `${timestamp}-${fileUpload.name}`;
 
+    // 2. Set the desired folder path and file name
+    let folderPath = ""; // Initialize folderPath variable
+    if (mode === "supplies") {
+      folderPath = "pictures/supplies";
+    } else if (mode === "plants") {
+      folderPath = "pictures/plants";
+    }
+
+    console.log("Upload file key:", fileKey);
+    const fullKey = `${folderPath}/${fileKey}`; // Output: "pictures/plants/avatar.png"
+
     // 2. Set up your upload payload properties
     const uploadParams = {
       Bucket: process.env.SPACES_BUCKET_NAME,
-      Key: fileKey, // The full path or filename for the object in the bucket.
+      Key: fullKey, // The full path or filename for the object in the bucket.
       Body: fileStream, // The AWS SDK accepts standard Web Streams natively
       ContentType: fileUpload.type, // Retains original mime type (e.g. image/png)
       ContentLength: fileUpload.size, // Retains original file size
@@ -51,7 +63,7 @@ export default async function uploadFileHandler(fileUpload) {
       client: s3Client,
       params: {
         Bucket: "lee-rae-site",
-        Key: fileKey,
+        Key: fullKey, // The full path or filename for the object in the bucket.
         Body: uploadParams.Body, // Keeps your raw Web ReadableStream intact!
         ContentType: uploadParams.ContentType,
         ContentLength: uploadParams.ContentLength,
@@ -69,7 +81,7 @@ export default async function uploadFileHandler(fileUpload) {
     // 5. Trigger the actual upload execution
     await parallelUploads3.done();
 
-    return { success: true, url: fileKey }; // Return the file key or URL for further processing
+    return { success: true, url: fullKey }; // Return the file key or URL for further processing
   } catch (error) {
     console.error("S3 upload failure:");
     console.log("Error details:", error);
